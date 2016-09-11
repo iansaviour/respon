@@ -1,0 +1,25 @@
+.body-service{
+	overflow-y:scroll;
+	height:250px;
+}
+
+.list-service{
+	border-radius: 3px;
+    padding: 10px 0;
+	border-top:1px solid #E4E2E2;
+}
+
+.head-icon-service{
+	float:left; 
+	width:50px; 
+	text-align:center; 
+	font-size:25px;
+}
+
+#ulService, #ulService .list-service {
+	-webkit-transform: scaleY(-1);
+   	-moz-transform: scaleY(-1);
+    -ms-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+} 

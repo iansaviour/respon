@@ -1,0 +1,6 @@
+login#
+host#.....
+
+Gawe:
+- inbox outbox tiap service
+- view keyword

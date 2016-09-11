@@ -1,0 +1,27 @@
+(seandainya pemisahnya #, lihat di tb_option->char_pemisah)
+==============================================================
+Kirim ke outbox formatnya untuk host :
+
+HOST#<id_outbox>#<pesan>
+
+contoh :
+
+HOST#1#LOGIN#admin#admin
+
+==============================================================
+Nanti akan dibalas (yang masuk di inbox):
+
+<id_outbox>#<balasan>
+
+contoh :
+
+1#true
+==============================================================
+
+NB :
+Inbox masih formatnya <id_outbox>#<balasan>, nerima mentah dari service, harus diolah dulu. 
+Caranya waktu lagi nunggu balasan, cek yang ada karakter pemisah (#) di inbox, explode pesannya, array[0] update ke id_outbox, array[1] update ke content.
+
+================================================================
+
+File mana yang ada kaitannya dengan ini ya? Biar bisa diubah.

@@ -1,0 +1,1 @@
+CreateObject("Wscript.Shell").Run "C:/xampp/htdocs/respon/respon.bat", 0, True
