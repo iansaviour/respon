@@ -126,28 +126,6 @@
             <li><a href="respon_config.php"><i class="fa fa-dashboard"></i> <span>Respon Dashboard</span></a></li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-cog"></i>
-                <span>Service</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="services.php"><i class="fa fa-database"></i> Service </a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-cog"></i>
-                <span>Keyword</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="user.php"><i class="fa fa-user"></i> User </a></li>
-                <li><a href="host.php"><i class="fa fa-database"></i> Host</a></li>
-                <li><a href="keyword.php"><i class="fa fa-wrench"></i> Keyword</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#">
                 <i class="fa fa-envelope"></i>
                 <span>Messaging</span>
                 <i class="fa fa-angle-left pull-right"></i>
