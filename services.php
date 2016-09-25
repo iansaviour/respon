@@ -22,7 +22,10 @@
       $pemisah_baris = $data['pemisah_baris'];
     }
     //
+    $max_char=$data['max_char'];
+    //
     $inbox_table=$data['inbox_table'];
+    $inbox_table_serv=$data['inbox_table_serv'];
     $inbox_content =$data['inbox_content'];
     $inbox_date =$data['inbox_date'];
     $inbox_flag =$data['inbox_flag'];
@@ -38,11 +41,13 @@
     //
   }else{
     $id=0;
+    $max_char = "100";
     $service ="";
     $pemisah_kolom = "";
     $pemisah_baris = "";
     //
     $inbox_table="";
+    $inbox_table_serv="";
     $inbox_content ="";
     $inbox_date ="";
     $inbox_flag ="";
@@ -89,6 +94,7 @@
                 <thead>
                   <tr>
                     <th>Service</th>
+                    <th>Service Inbox Table</th>
                     <th>Inbox Table</th>
                     <th>Inbox Content</th>
                     <th>Inbox Date</th>
@@ -101,6 +107,7 @@
                     <th>Outbox Flag</th>
                     <th>Outbox Recipient</th>
                     <th>Outbox Server</th>
+                    <th>Maksimum Karakter</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -146,10 +153,22 @@
                   <textarea class="form-control" name="txtPemisahBaris"><?php echo $pemisah_baris; ?></textarea>
                 </div>
               </div>
+              <div class="form-group">
+                <label for="input-service" class="col-sm-2 control-label">Maksimum Karakter</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" name="txtMaxChar"><?php echo $max_char; ?></textarea>
+                </div>
+              </div>
 
               <h3>Inbox Table</h3><hr>
               <div class="form-group">
-                <label for="input-inbox-table" class="col-sm-2 control-label">Inbox Table Name</label>
+                <label for="input-inbox-table" class="col-sm-2 control-label">Inbox Service Table Name</label>
+                <div class="col-sm-10">
+                  <input type="textbox" class="form-control" id="input-inbox-table" name="txtInboxTableServ" placeholder="Service Table Name" value="<?php echo $inbox_table_serv; ?>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input-inbox-table" class="col-sm-2 control-label">Inbox Sistem Table Name</label>
                 <div class="col-sm-10">
                   <input type="textbox" class="form-control" id="input-inbox-table" name="txtInboxTable" placeholder="Table Name" value="<?php echo $inbox_table; ?>">
                 </div>

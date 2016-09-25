@@ -1,16 +1,35 @@
 <?php
 	include 'includes/koneksi.php';
 	include 'includes/function.php';
-	
+
 	function add_log($data,$id_mysql){ //log respon
 		$query="INSERT INTO tb_log_respon(log,datetime) VALUES('".$data."',NOW())";
 		//echo $query . "<br>";
 		$result = mysqli_query($id_mysql,$query);
 	}
-	function balas_normal($id_mysql,$sender_var,$server_var,$pesan_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server){
-		$query="INSERT INTO " .$nm_tbl_outb. "(" .$nm_fl_msg. "," .$nm_fl_date. "," .$nm_fl_recipient. "," .$nm_fl_server. ") VALUES('".$pesan_var."',NOW(),'".$sender_var."','".$server_var."')";
-		//echo $query . "<br>";
-		$result = mysqli_query($id_mysql,$query);
+	function balas_normal($id_mysql,$sender_var,$server_var,$pesan_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server,$max_char_var){
+		
+		if(strlen($pesan_var)>$max_char_var){
+			//bagi
+			//$kode_unik = "[" . time() . "_" . "xxx" . "_" . "xxx" . "]";
+			$timestamp_var = time();
+			$pjg_per_pesan = ($max_char_var-strlen("[" . $timestamp_var . "_" . "xxx" . "_" . "xxx" . "]"));
+			$jml_pesan = ceil(strlen($pesan_var)/$pjg_per_pesan);
+			//
+			for ($i=1; $i<=$jml_pesan; $i++) {
+				$kode_unik = "[" . $timestamp_var . "_" . str_pad($jml_pesan, 3, '0', STR_PAD_LEFT) . "_" . str_pad($i, 3, '0', STR_PAD_LEFT) . "]";
+				$str = substr($pesan_var, (($i-1)*$pjg_per_pesan),$pjg_per_pesan);
+
+				$pesan_varx = $kode_unik . $str;
+
+				$query="INSERT INTO " .$nm_tbl_outb. "(" .$nm_fl_msg. "," .$nm_fl_date. "," .$nm_fl_recipient. "," .$nm_fl_server. ") VALUES('". $pesan_varx ."',NOW(),'".$sender_var."','".$server_var."')";
+				$result = mysqli_query($id_mysql,$query);
+			}
+
+		}else{
+			$query="INSERT INTO " .$nm_tbl_outb. "(" .$nm_fl_msg. "," .$nm_fl_date. "," .$nm_fl_recipient. "," .$nm_fl_server. ") VALUES('".$pesan_var."',NOW(),'".$sender_var."','".$server_var."')";
+			$result = mysqli_query($id_mysql,$query);
+		}
 	}
 	function balas_spam($id_mysql,$balas_spam_var,$sender_var,$server_var,$pesan_spam_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server){
 		if($balas_spam_var == '1'){
@@ -59,6 +78,7 @@
 	while($row = $resultx->fetch_assoc()) {
 		//deklarasi
 		$nama_service = $row['service'];
+		$max_char = $row['max_char'];
 		$pemisah_kolom = $row['pemisah_kolom'];
 		$pemisah_baris = $row['pemisah_baris'];
 		//
@@ -156,7 +176,7 @@
 											$row_func = $result_func->fetch_array();
 											//output
 											$pesan = $nama_hasil.$row_func[0];
-											balas_normal($id_mysql,$sender,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_normal($id_mysql,$sender,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$max_char);
 										}else{
 											balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
 										}
@@ -399,7 +419,7 @@
 									}else{
 										$pesan=$result_par;
 									}
-									balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
+									balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 								}
 							}else{
 								//gagal connect
