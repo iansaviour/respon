@@ -104,6 +104,10 @@
 		while($row_inb = $result_inb->fetch_array()) {
 			//get message
 			$id_message = $row_inb['id'];
+			//set inbox flag = 2 , processed
+	    	$query_flag = "UPDATE " . $inbox_table . " SET " . $inbox_flag . "='2' WHERE id='" . $id_message . "'";
+	    	$result_flag = mysqli_query($id_mysql,$query_flag);
+			//
 			$message = $row_inb[$inbox_isi];
 			$sender = $row_inb[$inbox_sender];
 			$server_inb = $row_inb[$inbox_server];
@@ -441,8 +445,8 @@
 				//balas spam (random message tanpa karakter pemisah)
 				balas_spam($id_mysql,$balas_spam,$sender,$server_inb,$balasan_prefix.$pesan_spam,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 			}
-	    	//set inbox flag = 2
-	    	$query_flag = "UPDATE " . $inbox_table . " SET " . $inbox_flag . "='2' WHERE id='" . $id_message . "'";
+	    	//set inbox flag = 3
+	    	$query_flag = "UPDATE " . $inbox_table . " SET " . $inbox_flag . "='3' WHERE id='" . $id_message . "'";
 	    	$result_flag = mysqli_query($id_mysql,$query_flag);
 	    	//
 	    	$cnt_msg_sub += 1;
