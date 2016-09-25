@@ -100,14 +100,13 @@
 		//get inbox flag = 1
 	    $query_inb = "SELECT * FROM ".$inbox_table." WHERE ".$inbox_flag."='1'";
 		$result_inb = mysqli_query($id_mysql,$query_inb);
+		//set inbox flag = 2 , processed
+    	$query_flag = "UPDATE " . $inbox_table . " SET " . $inbox_flag . "='2' WHERE ".$inbox_flag."='1'";
+    	$result_flag = mysqli_query($id_mysql,$query_flag);
 		//
 		while($row_inb = $result_inb->fetch_array()) {
 			//get message
 			$id_message = $row_inb['id'];
-			//set inbox flag = 2 , processed
-	    	$query_flag = "UPDATE " . $inbox_table . " SET " . $inbox_flag . "='2' WHERE id='" . $id_message . "'";
-	    	$result_flag = mysqli_query($id_mysql,$query_flag);
-			//
 			$message = $row_inb[$inbox_isi];
 			$sender = $row_inb[$inbox_sender];
 			$server_inb = $row_inb[$inbox_server];
