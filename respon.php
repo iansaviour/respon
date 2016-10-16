@@ -112,7 +112,8 @@
 			$server_inb = $row_inb[$inbox_server];
 			$msg_array = explode($char_pemisah,$message);
 			$balasan_prefix = '';
-			if(count($msg_array)>1){
+			//if(count($msg_array)>1){ update sender parameter
+			if(count($msg_array)>0){
 				$keyword = '';
 				$parameter = '';
 				$host_id_outbox = '';
@@ -126,12 +127,20 @@
 					$balasan_prefix = $host_id_outbox . $char_pemisah;
 					//
 					$parameter = substr($message, strlen($keyword_host . $char_pemisah . $host_id_outbox . $char_pemisah . $keyword . $char_pemisah));
-					$parameter_array = explode($char_pemisah,$parameter);
+					if($parameter == ""){
+						$parameter_array = array();
+					}else{
+						$parameter_array = explode($char_pemisah,$parameter);
+					}
 				}else{
 					$jenis_pesan = '1';
 					$keyword = $msg_array[0];
 					$parameter = substr($message, strlen($keyword . $char_pemisah));
-					$parameter_array = explode($char_pemisah,$parameter);
+					if($parameter == ""){
+						$parameter_array = array();
+					}else{
+						$parameter_array = explode($char_pemisah,$parameter);
+					}
 				}
 				//olah
 				if(strlen($keyword) > 0){
@@ -142,11 +151,11 @@
 					if(count($row_kw)>0){//check keyword
 						$id_operasi = $row_kw['id_operasi'];
 						//
-						$query_par = "SELECT * FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."'";
+						$query_par = "SELECT * FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND use_sender='2'";
 						$result_par = mysqli_query($id_mysql,$query_par);
 						$row_par = $result_par->fetch_array();
 						$row_par_count = mysqli_num_rows($result_par);
-
+						//
 						if($row_par_count==count($parameter_array)){
 							//
 							$host_kw = $row_kw['host'];
@@ -165,23 +174,35 @@
 										$nama_hasil = $row_func['nama_hasil'];
 										//parameter
 										$exec_par = '';
-										for ($i=0; $i<count($parameter_array); $i++) {
-											if($i>0){
-												$exec_par = $exec_par . ",'" . $parameter_array[$i] . "'";
+										//
+										$query_value = "SELECT parameter,use_sender FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."'";
+										$result_value = mysqli_query($id_mysql,$query_value);
+										$i=0;
+										while($row_value = $result_value->fetch_array()) {
+											if($row_value['use_sender']=="1"){ //parameter ID pengirim
+												if($exec_par==''){
+													$exec_par = $exec_par . "'" . $sender . "'";
+												}else{
+													$exec_par = $exec_par . ",'" . $sender . "'";
+												}
 											}else{
-												$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
+												if($exec_par == ''){
+													$exec_par = $exec_par . ",'" . $parameter_array[$i] . "'";
+												}else{
+													$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
+												}
+												$i++;
 											}
 										}
 										$query_exec = "SELECT ".$nama_function."(".$exec_par.")";
-
 										//eksekusi
 										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 											$row_func = $result_func->fetch_array();
 											//output
 											$pesan = $nama_hasil.$row_func[0];
-											balas_normal($id_mysql,$sender,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$max_char);
+											balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 										}else{
-											balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 										}
 									}else{//Procedure
 										//cari procedure
@@ -191,21 +212,34 @@
 										$nama_procedure = $row_func['nama_prosedural'];
 										//parameter
 										$exec_par = '';
-										for ($i=0; $i<count($parameter_array); $i++) {
-											if($i>0){
-												$exec_par = $exec_par . ",'" . $parameter_array[$i] . "'";
+										//
+										$query_value = "SELECT parameter,use_sender FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."'";
+										$result_value = mysqli_query($id_mysql,$query_value);
+										$i=0;
+										while($row_value = $result_value->fetch_array()) {
+											if($row_value['use_sender']=="1"){ //parameter ID pengirim
+												if($exec_par==''){
+													$exec_par = $exec_par . "'" . $sender . "'";
+												}else{
+													$exec_par = $exec_par . ",'" . $sender . "'";
+												}
 											}else{
-												$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
+												if($exec_par == ''){
+													$exec_par = $exec_par . ",'" . $parameter_array[$i] . "'";
+												}else{
+													$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
+												}
+												$i++;
 											}
 										}
+										//
 										$query_exec = "CALL ".$nama_procedure."(".$exec_par.")";
-
 										//eksekusi
 										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 											//output
-											balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 										}else{
-											balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 										}
 									}
 								}elseif($row_kw['id_jenis_operasi']==1){//insert
@@ -236,9 +270,9 @@
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}
 								}elseif($row_kw['id_jenis_operasi']==2){//update
 									//cari update tabel
@@ -263,27 +297,49 @@
 										$j++;
 									}
 									//kunci update
-									$query_kunci = "SELECT parameter,type FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
+									$query_kunci = "SELECT parameter,type,use_sender FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
 									$result_kunci = mysqli_query($id_mysql,$query_kunci);
 									$kunci_par = '';
-									$j=0;
 									while($row_kunci = $result_kunci->fetch_array()) {
-										if($j>0){
-											$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i]. "'";
+										if($row_kunci['use_sender'] == '1'){//parameter ID pengirim
+											if($kunci_par == ''){
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $sender . "%'";
+												}else{
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $sender . "'";
+												}
+											}else{
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $sender. "%'";
+												}else{
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $sender. "'";
+												}
+											}
 										}else{
-											$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i] . "'";
+											if($kunci_par == ''){
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$i] . "%'";
+												}else{
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i] . "'";
+												}
+											}else{
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$i]. "%'";
+												}else{
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i]. "'";
+												}
+											}
+											$i++;
 										}
-										$i++;
-										$j++;
 									}
 									//eksekusi
 									$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}
 								}elseif($row_kw['id_jenis_operasi']==3){//delete
 									//cari delete tabel
@@ -293,26 +349,51 @@
 									$nama_tabel = $row_func['nama_tabel'];
 									//parameter
 									//kunci delete
-									$query_kunci = "SELECT parameter,type FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
+									$query_kunci = "SELECT parameter,type,use_sender FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
 									$result_kunci = mysqli_query($id_mysql,$query_kunci);
 									$kunci_par = '';
 									$j=0;
 									while($row_kunci = $result_kunci->fetch_array()) {
-										if($j>0){
-											$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j]. "'";
+										if($row_kunci['use_sender'] == '1'){//parameter ID pengirim
+											if($kunci_par == ''){
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $sender . "%'";
+												}else{
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $sender . "'";
+												}
+											}else{
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $sender. "%'";
+												}else{
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $sender. "'";
+												}
+											}
+											$j++;
 										}else{
-											$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j] . "'";
+											if($kunci_par == ''){
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$j] . "%'";
+												}else{
+													$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j] . "'";
+												}
+											}else{
+												if($row_kunci['type']=='LIKE'){
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$j]. "%'";
+												}else{
+													$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j]. "'";
+												}
+											}
+											$j++;
 										}
-										$j++;
 									}
 									//eksekusi
 									$query_exec = "DELETE FROM ".$nama_tabel." WHERE " . $kunci_par;
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 									}
 								}elseif($row_kw['id_jenis_operasi']==4){//select
 									//cari tabel
@@ -337,18 +418,28 @@
 										$join_par = $join_par . " AND " . $row_join['field_join'];
 									}
 									//parameter
-									$query_func = "SELECT parameter,type FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
+									$query_func = "SELECT parameter,type,use_sender FROM tb_operasi_parameter WHERE id_operasi='".$id_operasi."' AND is_kunci='1'";
 									$result_func = mysqli_query($id_mysql,$query_func);
 
 									$where_par = '';
 									$i=0;
 									while($row_func = $result_func->fetch_array()) {
-										if($row_func['type']=='LIKE'){
-											$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '%" . $parameter_array[$i] ."%'";
+										if($row_func['use_sender'] == '1'){//parameter ID pengirim
+											if($row_func['type']=='LIKE'){
+												$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '%" . $sender ."%'";
+											}else{
+												$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '" . $sender ."'";
+											}
+											$i++;
 										}else{
-											$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '" . $parameter_array[$i] ."'";
+											if($row_func['type']=='LIKE'){
+												$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '%" . $parameter_array[$i] ."%'";
+											}else{
+												$where_par = $where_par . " AND " . $row_func['parameter'] . " " . $row_func['type'] . " '" . $parameter_array[$i] ."'";
+											}
+											$i++;
 										}
-										$i++;
+										
 									}
 									//output
 									$query_output = "SELECT output,nama_output FROM tb_operasi_output WHERE id_operasi='".$id_operasi."'";
@@ -441,7 +532,7 @@
 					balas_spam($id_mysql,$balas_spam,$sender,$server_inb,$balasan_prefix.$pesan_spam,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 				}
 			}else{
-				//balas spam (random message tanpa karakter pemisah)
+				//balas spam (random message kosong)
 				balas_spam($id_mysql,$balas_spam,$sender,$server_inb,$balasan_prefix.$pesan_spam,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
 			}
 	    	//set inbox flag = 3

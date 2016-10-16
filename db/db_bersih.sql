@@ -65,7 +65,7 @@ CREATE TABLE `tb_event` (
   `event_message` text,
   `event_status` tinyint(4) DEFAULT NULL COMMENT '1=active;2=no',
   PRIMARY KEY (`id_event`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_event` */
 
@@ -76,7 +76,7 @@ CREATE TABLE `tb_event_kontak` (
   `id_event` smallint(5) unsigned DEFAULT NULL,
   `id_kontak` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id_event_kontak`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_event_kontak` */
 
@@ -98,7 +98,7 @@ CREATE TABLE `tb_event_meta` (
   UNIQUE KEY `ID` (`id_event_meta`),
   KEY `id_event` (`id_event`),
   CONSTRAINT `tb_event_meta_ibfk_1` FOREIGN KEY (`id_event`) REFERENCES `tb_event` (`id_event`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `tb_event_meta` */
 
@@ -108,7 +108,7 @@ CREATE TABLE `tb_grup_kontak` (
   `id_grup_kontak` int(11) NOT NULL AUTO_INCREMENT,
   `grup_kontak` varchar(255) NOT NULL,
   PRIMARY KEY (`id_grup_kontak`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_grup_kontak` */
 
@@ -123,7 +123,7 @@ CREATE TABLE `tb_grup_kontak_member` (
   KEY `FK_tb_grup_kontak_member2` (`id_grup_kontak`),
   CONSTRAINT `FK_tb_grup_kontak_member` FOREIGN KEY (`id_kontak`) REFERENCES `tb_kontak` (`id_kontak`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_tb_grup_kontak_member2` FOREIGN KEY (`id_grup_kontak`) REFERENCES `tb_grup_kontak` (`id_grup_kontak`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=557 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_grup_kontak_member` */
 
@@ -142,7 +142,7 @@ CREATE TABLE `tb_host` (
   `is_local` tinyint(1) NOT NULL,
   `karakter_pemisah` char(1) DEFAULT NULL,
   PRIMARY KEY (`id_host`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_host` */
 
@@ -794,10 +794,12 @@ CREATE TABLE `tb_operasi` (
   `is_publik` tinyint(1) NOT NULL COMMENT '1: publik; 0: privat',
   `nama_operasi` varchar(255) NOT NULL,
   `penanda_login` tinyint(3) unsigned DEFAULT '2',
+  `use_sender` tinyint(3) NOT NULL DEFAULT '2' COMMENT '1 = yes; 2 = no',
+  `sender_col` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_operasi`),
   KEY `FK_tb_operasi_to_tb_host` (`id_host`),
   CONSTRAINT `FK_tb_operasi_to_tb_host` FOREIGN KEY (`id_host`) REFERENCES `tb_host` (`id_host`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_operasi` */
 
@@ -928,6 +930,7 @@ CREATE TABLE `tb_operasi_parameter` (
   `nama_parameter` varchar(255) NOT NULL,
   `is_kunci` tinyint(1) NOT NULL COMMENT '1: kunci; 0: value',
   `type` enum('','=','>','>=','<','<=','LIKE') DEFAULT NULL,
+  `use_sender` tinyint(3) NOT NULL DEFAULT '2' COMMENT '1 = yes; 2 = no',
   PRIMARY KEY (`id_operasi_parameter`),
   KEY `FK_tb_operasi_parameter_to_tb_operasi` (`id_operasi`),
   CONSTRAINT `FK_tb_operasi_parameter_to_tb_operasi` FOREIGN KEY (`id_operasi`) REFERENCES `tb_operasi` (`id_operasi`) ON DELETE CASCADE
@@ -1028,7 +1031,7 @@ CREATE TABLE `tb_service` (
   `outbox_server` varchar(255) NOT NULL DEFAULT '0',
   `max_char` smallint(5) unsigned DEFAULT NULL,
   PRIMARY KEY (`id_service`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `tb_service` */
 

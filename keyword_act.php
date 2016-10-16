@@ -96,6 +96,7 @@ if ($type=='1') {//insert Insert
 	$PrmUpd = isset($_POST['PrmUpd']) ? $_POST['PrmUpd'] : '';
 	//
 	$FieldUpd2 = isset($_POST['2FieldUpd']) ? $_POST['2FieldUpd'] : '';
+	$SenderParamUpd = isset($_POST['SenderParamUpd']) ? $_POST['SenderParamUpd'] : '';
 	$PrmUpd2 = isset($_POST['2PrmUpd']) ? $_POST['2PrmUpd'] : '';
 	$TypeUpd2 = isset($_POST['2TypeUpd']) ? $_POST['2TypeUpd'] : '';
 	try {
@@ -113,7 +114,7 @@ if ($type=='1') {//insert Insert
 			}
 			//parameter kunci
 			for ($i=0; $i<count($FieldUpd2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_last','".$FieldUpd2[$i]."','".$PrmUpd2[$i]."','1','".$TypeUpd2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_last','".$FieldUpd2[$i]."','".$PrmUpd2[$i]."','1','".$TypeUpd2[$i]."','".$SenderParamUpd[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo "1";
@@ -142,6 +143,7 @@ if ($type=='1') {//insert Insert
 	$PrmUpd = isset($_POST['PrmUpd']) ? $_POST['PrmUpd'] : '';
 	//
 	$FieldUpd2 = isset($_POST['2FieldUpd']) ? $_POST['2FieldUpd'] : '';
+	$SenderParamUpd = isset($_POST['SenderParamUpd']) ? $_POST['SenderParamUpd'] : '';
 	$PrmUpd2 = isset($_POST['2PrmUpd']) ? $_POST['2PrmUpd'] : '';
 	$TypeUpd2 = isset($_POST['2TypeUpd']) ? $_POST['2TypeUpd'] : '';
 	try {
@@ -165,7 +167,7 @@ if ($type=='1') {//insert Insert
 			}
 			//parameter kunci
 			for ($i=0; $i<count($FieldUpd2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_operasi','".$FieldUpd2[$i]."','".$PrmUpd2[$i]."','1','".$TypeUpd2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_operasi','".$FieldUpd2[$i]."','".$PrmUpd2[$i]."','1','".$TypeUpd2[$i]."','".$SenderParamUpd[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo '1';
@@ -190,6 +192,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynDeleteRow']) ? makeSafe($_POST['DynDeleteRow']) : '';
 	//
 	$FieldDel2 = isset($_POST['2FieldDel']) ? $_POST['2FieldDel'] : '';
+	$SenderParamDel = isset($_POST['SenderParamDel']) ? $_POST['SenderParamDel'] : '';
 	$PrmDel2 = isset($_POST['2PrmDel']) ? $_POST['2PrmDel'] : '';
 	$TypeDel2 = isset($_POST['2TypeDel']) ? $_POST['2TypeDel'] : '';
 	try {
@@ -202,7 +205,7 @@ if ($type=='1') {//insert Insert
 			$result = mysqli_query($id_mysql,$query);
 			//parameter kunci
 			for ($i=0; $i<count($FieldDel2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_last','".$FieldDel2[$i]."','".$PrmDel2[$i]."','1','".$TypeDel2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_last','".$FieldDel2[$i]."','".$PrmDel2[$i]."','1','".$TypeDel2[$i]."','".$SenderParamDel[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo "1";
@@ -228,6 +231,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynDeleteRow']) ? makeSafe($_POST['DynDeleteRow']) : '';
 	//
 	$FieldDel2 = isset($_POST['2FieldDel']) ? $_POST['2FieldDel'] : '';
+	$SenderParamDel = isset($_POST['SenderParamDel']) ? $_POST['SenderParamDel'] : '';
 	$PrmDel2 = isset($_POST['2PrmDel']) ? $_POST['2PrmDel'] : '';
 	$TypeDel2 = isset($_POST['2TypeDel']) ? $_POST['2TypeDel'] : '';
 	try {
@@ -246,7 +250,7 @@ if ($type=='1') {//insert Insert
 			//
 			//parameter kunci
 			for ($i=0; $i<count($FieldDel2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_operasi','".$FieldDel2[$i]."','".$PrmDel2[$i]."','1','".$TypeDel2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_operasi','".$FieldDel2[$i]."','".$PrmDel2[$i]."','1','".$TypeDel2[$i]."','".$SenderParamDel[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo '1';
@@ -273,6 +277,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynFunctionRow']) ? makeSafe($_POST['DynFunctionRow']) : '';
 	//
 	$FieldFunc = isset($_POST['FieldFunc']) ? $_POST['FieldFunc'] : '';
+	$SenderParamFunc = isset($_POST['SenderParamFunc']) ? $_POST['SenderParamFunc'] : '';
 	$PrmFunc = isset($_POST['PrmFunc']) ? $_POST['PrmFunc'] : '';
 	try {
 	$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login')";
@@ -284,7 +289,7 @@ if ($type=='1') {//insert Insert
 	  $result = mysqli_query($id_mysql,$query);
 	  //parameter
 	  for ($i=0; $i<count($FieldFunc); $i++) {
-	    $query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci) VALUES('$id_last','".$FieldFunc[$i]."','".$PrmFunc[$i]."','0')";
+	    $query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,use_sender) VALUES('$id_last','".$FieldFunc[$i]."','".$PrmFunc[$i]."','0','".$SenderParamFunc[$i]."')";
 	    $result = mysqli_query($id_mysql,$query);
 	  }
 	  echo "1";
@@ -311,6 +316,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynFunctionRow']) ? makeSafe($_POST['DynFunctionRow']) : '';
 	//
 	$FieldFunc = isset($_POST['FieldFunc']) ? $_POST['FieldFunc'] : '';
+	$SenderParamFunc = isset($_POST['SenderParamFunc']) ? $_POST['SenderParamFunc'] : '';
 	$PrmFunc = isset($_POST['PrmFunc']) ? $_POST['PrmFunc'] : '';
 	try {
 		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login' WHERE id_operasi='$id_operasi'";
@@ -327,7 +333,7 @@ if ($type=='1') {//insert Insert
 			$result = mysqli_query($id_mysql,$query);
 			//
 			for ($i=0; $i<count($FieldFunc); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci) VALUES('$id_operasi','".$FieldFunc[$i]."','".$PrmFunc[$i]."','0')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,use_sender) VALUES('$id_operasi','".$FieldFunc[$i]."','".$PrmFunc[$i]."','0','".$SenderParamFunc[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo '1';
@@ -353,6 +359,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynProcedureRow']) ? makeSafe($_POST['DynProcedureRow']) : '';
 	//
 	$FieldProc = isset($_POST['FieldProc']) ? $_POST['FieldProc'] : '';
+	$SenderParamProc = isset($_POST['SenderParamProc']) ? $_POST['SenderParamProc'] : '';
 	$PrmProc = isset($_POST['PrmProc']) ? $_POST['PrmProc'] : '';
 	try {
 	$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login')";
@@ -364,7 +371,7 @@ if ($type=='1') {//insert Insert
 	$result = mysqli_query($id_mysql,$query);
 	//parameter
 	for ($i=0; $i<count($FieldProc); $i++) {
-	  $query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci) VALUES('$id_last','".$FieldProc[$i]."','".$PrmProc[$i]."','0')";
+	  $query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,use_sender) VALUES('$id_last','".$FieldProc[$i]."','".$PrmProc[$i]."','0','".$SenderParamProc[$i]."')";
 	  $result = mysqli_query($id_mysql,$query);
 	}
 	echo "1";
@@ -390,6 +397,7 @@ if ($type=='1') {//insert Insert
 	$jml_row_param = isset($_POST['DynProcedureRow']) ? makeSafe($_POST['DynProcedureRow']) : '';
 	//
 	$FieldProc = isset($_POST['FieldProc']) ? $_POST['FieldProc'] : '';
+	$SenderParamProc = isset($_POST['SenderParamProc']) ? $_POST['SenderParamProc'] : '';
 	$PrmProc = isset($_POST['PrmProc']) ? $_POST['PrmProc'] : '';
 	try {
 		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login' WHERE id_operasi='$id_operasi'";
@@ -406,7 +414,7 @@ if ($type=='1') {//insert Insert
 			$result = mysqli_query($id_mysql,$query);
 			//
 			for ($i=0; $i<count($FieldProc); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci) VALUES('$id_operasi','".$FieldProc[$i]."','".$PrmProc[$i]."','0')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,use_sender) VALUES('$id_operasi','".$FieldProc[$i]."','".$PrmProc[$i]."','0','".$SenderParamProc[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			echo '1';
@@ -437,6 +445,7 @@ if ($type=='1') {//insert Insert
 	$OrderTypeSearch = isset($_POST['OrderTypeSearch']) ? $_POST['OrderTypeSearch'] : '';
 	//
 	$FieldSearch2 = isset($_POST['2FieldSearch']) ? $_POST['2FieldSearch'] : '';
+	$SenderParamSearch = isset($_POST['SenderParamSearch']) ? $_POST['SenderParamSearch'] : '';
 	$PrmSearch2 = isset($_POST['2PrmSearch']) ? $_POST['2PrmSearch'] : '';
 	$TypeSearch2 = isset($_POST['2TypeSearch']) ? $_POST['2TypeSearch'] : '';
 	//
@@ -459,7 +468,7 @@ if ($type=='1') {//insert Insert
 			}
 			//parameter kunci
 			for ($i=0; $i<count($FieldSearch2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_last','".$FieldSearch2[$i]."','".$PrmSearch2[$i]."','1','".$TypeSearch2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_last','".$FieldSearch2[$i]."','".$PrmSearch2[$i]."','1','".$TypeSearch2[$i]."','".$SenderParamSearch[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			//parameter order by
@@ -503,6 +512,7 @@ if ($type=='1') {//insert Insert
 	$OrderTypeSearch = isset($_POST['OrderTypeSearch']) ? $_POST['OrderTypeSearch'] : '';
 	//
 	$FieldSearch2 = isset($_POST['2FieldSearch']) ? $_POST['2FieldSearch'] : '';
+	$SenderParamSearch = isset($_POST['SenderParamSearch']) ? $_POST['SenderParamSearch'] : '';
 	$PrmSearch2 = isset($_POST['2PrmSearch']) ? $_POST['2PrmSearch'] : '';
 	$TypeSearch2 = isset($_POST['2TypeSearch']) ? $_POST['2TypeSearch'] : '';
 	//
@@ -533,7 +543,7 @@ if ($type=='1') {//insert Insert
 			$result = mysqli_query($id_mysql,$query);
 			//
 			for ($i=0; $i<count($FieldSearch2); $i++) {
-				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type) VALUES('$id_operasi','".$FieldSearch2[$i]."','".$PrmSearch2[$i]."','1','".$TypeSearch2[$i]."')";
+				$query = "INSERT INTO tb_operasi_parameter(id_operasi,parameter,nama_parameter,is_kunci,type,use_sender) VALUES('$id_operasi','".$FieldSearch2[$i]."','".$PrmSearch2[$i]."','1','".$TypeSearch2[$i]."','".$SenderParamSearch[$i]."')";
 				$result = mysqli_query($id_mysql,$query);
 			}
 			//parameter order by

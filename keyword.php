@@ -29,6 +29,7 @@
     $Keyw = $datax['keyword'];
     $selPub = $datax['is_publik'];
     $selLogin = $datax['penanda_login'];
+    //
     if($selJenis == '0'){//prosedural
       $queryx = "SELECT nama_prosedural,nama_hasil FROM tb_operasi_prosedural WHERE id_operasi='".$_GET['id']."' LIMIT 1";
       $resultx = mysqli_query($id_mysql,$queryx);
@@ -741,6 +742,7 @@
                 <table class="table table-bordered" id="2DynUpdate">
                   <tr>
                     <th>Parameter</th>
+                    <th>Gunakan ID Pengirim</th>
                     <th>Nama Parameter</th>
                     <th>Type</th>
                     <th style="width: 40px">#</th>
@@ -767,6 +769,12 @@
                               }
                             }
                             ?>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control" name="SenderParamUpd[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
                           </select>
                         </td>
                         <td>
@@ -804,6 +812,12 @@
                           </select>
                         </td>
                         <td>
+                          <select class="form-control" name="SenderParamUpd[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
+                          </select>
+                        </td>
+                        <td>
                           <input class="form-control" type="textbox" value="<?php echo $row_det['nama_parameter']; ?>" name="2PrmUpd[]">
                         </td>
                         <td>
@@ -838,6 +852,12 @@
                           }
                         }
                         ?>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control" name="SenderParamUpd[]">
+                        <option value="1">Ya</option>
+                        <option SELECTED value="2">Tidak</option>
                       </select>
                     </td>
                     <td>
@@ -1210,6 +1230,7 @@
                 <table class="table table-bordered" id="2DynDelete">
                   <tr>
                     <th>Parameter</th>
+                    <th>Gunakan ID Pengirim</th>
                     <th>Nama Parameter</th>
                     <th>Type</th>
                     <th style="width: 40px">#</th>
@@ -1236,6 +1257,12 @@
                               }
                             }
                             ?>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control" name="SenderParamDel[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
                           </select>
                         </td>
                         <td>
@@ -1273,6 +1300,12 @@
                           </select>
                         </td>
                         <td>
+                          <select class="form-control" name="SenderParamDel[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
+                          </select>
+                        </td>
+                        <td>
                           <input class="form-control" type="textbox" value="<?php echo $row_det['nama_parameter']; ?>" name="2PrmDel[]">
                         </td>
                         <td>
@@ -1307,6 +1340,12 @@
                           }
                         }
                         ?>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control" name="SenderParamDel[]">
+                        <option value="1">Ya</option>
+                        <option SELECTED value="2">Tidak</option>
                       </select>
                     </td>
                     <td>
@@ -1671,6 +1710,7 @@
                 <table class="table table-bordered" id="DynFunction">
                   <tr>
                     <th>Parameter</th>
+                    <th>Gunakan ID Pengirim</th>
                     <th>Nama Parameter</th>
                     <th style="width: 40px">#</th>
                   </tr>
@@ -1703,6 +1743,12 @@
                           </select>
                         </td>
                         <td>
+                          <select class="form-control" name="SenderParamFunc[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
+                          </select>
+                        </td>
+                        <td>
                           <input class="form-control" type="textbox" value="<?php echo $row_det['nama_parameter']; ?>" name="PrmFunc[]">
                         </td>
                         <td><button id="AddRowFunction" type="button" class="btn btn-info pull-right ladda-button" data-color="black" data-size="s" data-style="zoom-out"><span class="ladda-label"><i class="fa fa-plus"></i></span> Add Row</button></td>
@@ -1728,6 +1774,12 @@
                               }
                             }
                             ?>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control" name="SenderParamFunc[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
                           </select>
                         </td>
                         <td>
@@ -1759,6 +1811,12 @@
                           }
                         }
                         ?>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control" name="SenderParamFunc[]">
+                        <option value="1">Ya</option>
+                        <option SELECTED value="2">Tidak</option>
                       </select>
                     </td>
                     <td>
@@ -2036,6 +2094,7 @@
                 <table class="table table-bordered" id="DynProcedure">
                   <tr>
                     <th>Parameter</th>
+                    <th>Gunakan ID Pengirim</th>
                     <th>Nama Parameter</th>
                     <th style="width: 40px">#</th>
                   </tr>
@@ -2049,7 +2108,7 @@
                       ?>
                       <tr>
                         <td>
-                          <select class="form-control" name="FieldProcc[]">
+                          <select class="form-control" name="FieldProc[]">
                             <?php
                             if($selFunc!=''){
                               $query = "SELECT CAST(param_list AS CHAR(1000) CHARACTER SET utf8) AS parameter FROM mysql.proc WHERE db = '".$data_h['db']."' AND NAME = '".$selFunc ."'";
@@ -2065,6 +2124,12 @@
                               }
                             }
                             ?>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control" name="SenderParamProc[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
                           </select>
                         </td>
                         <td>
@@ -2096,6 +2161,12 @@
                           </select>
                         </td>
                         <td>
+                          <select class="form-control" name="SenderParamProc[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
+                          </select>
+                        </td>
+                        <td>
                           <input class="form-control" type="textbox" value="<?php echo $row_det['nama_parameter']; ?>" name="PrmProc[]">
                         </td>
                         <td><button id='DelRowProcedure' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button></td>
@@ -2124,6 +2195,12 @@
                           }
                         }
                         ?>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control" name="SenderParamProc[]">
+                        <option value="1">Ya</option>
+                        <option SELECTED value="2">Tidak</option>
                       </select>
                     </td>
                     <td>
@@ -2403,6 +2480,7 @@
                 <table class="table table-bordered" id="2DynSearch">
                   <tr>
                     <th>Parameter</th>
+                    <th>Gunakan ID Pengirim</th>
                     <th>Nama Parameter</th>
                     <th>Type</th>
                     <th style="width: 40px">#</th>
@@ -2431,6 +2509,12 @@
                               }
                             }
                             ?>
+                          </select>
+                        </td>
+                        <td>
+                          <select class="form-control" name="SenderParamSearch[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
                           </select>
                         </td>
                         <td>
@@ -2470,6 +2554,12 @@
                           </select>
                         </td>
                         <td>
+                          <select class="form-control" name="SenderParamSearch[]">
+                            <option <?php if($row_det['use_sender']=='1'){echo "SELECTED";} ?> value="1">Ya</option>
+                            <option <?php if($row_det['use_sender']=='2'){echo "SELECTED";} ?> value="2">Tidak</option>
+                          </select>
+                        </td>
+                        <td>
                           <input class="form-control" type="textbox" value="<?php echo $row_det['nama_parameter']; ?>" name="2PrmSearch[]">
                         </td>
                         <td>
@@ -2506,6 +2596,12 @@
                           }
                         }
                         ?>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control" name="SenderParamSearch[]">
+                        <option value="1">Ya</option>
+                        <option SELECTED value="2">Tidak</option>
                       </select>
                     </td>
                     <td>
@@ -3212,7 +3308,9 @@ $("#2AddRowUpdate").click(function(event) {
                               }
                             }
                           ?>
-                            "</select></td><td><input class='form-control' type='textbox' value='' name='2PrmUpd[]'></td>" + 
+                            "</select></td>" + 
+                            "<td><select class='form-control' name='SenderParamUpd[]''><option value='1'>Ya</option><option SELECTED value='2'>Tidak</option></select></td>" +
+                            "<td><input class='form-control' type='textbox' value='' name='2PrmUpd[]'></td>" + 
                             "<td><select class='form-control' name='2TypeUpd[]'><option value='='>=</option><option value='<'>&lt;</option><option value='<='>&lt;=</option><option value='>'>&gt;</option><option value='>='>&gt;=</option><option value='LIKE'>LIKE</option></select></td>" +
                             "<td><button id='2DelRowUpdate' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button></td>" +
                             "</tr>");
@@ -3321,7 +3419,9 @@ $("#2AddRowUpdate").click(function(event) {
                               }
                             }
                           ?>
-                            "</select></td><td><input class='form-control' type='textbox' value='' name='2PrmDel[]'></td>" + 
+                            "</select></td>" + 
+                            "<td><select class='form-control' name='SenderParamDel[]''><option value='1'>Ya</option><option SELECTED value='2'>Tidak</option></select></td>" +
+                            "<td><input class='form-control' type='textbox' value='' name='2PrmDel[]'></td>" + 
                             "<td><select class='form-control' name='2TypeDel[]'><option value='='>=</option><option value='<'>&lt;</option><option value='<='>&lt;=</option><option value='>'>&gt;</option><option value='>='>&gt;=</option><option value='LIKE'>LIKE</option></select></td>" +
                             "<td><button id='2DelRowDelete' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button></td>" +
                             "</tr>");
@@ -3432,7 +3532,9 @@ $("#2AddRowUpdate").click(function(event) {
                               }
                             }
                           ?>
-                            "</select></td><td><input class='form-control' type='textbox' value='' name='PrmFunc[]'></td><td>" + 
+                            "</select></td>" + 
+                            "<td><select class='form-control' name='SenderParamFunc[]''><option value='1'>Ya</option><option SELECTED value='2'>Tidak</option></select></td>" +
+                            "<td><input class='form-control' type='textbox' value='' name='PrmFunc[]'></td><td>" + 
                             "<button id='DelRowFunction' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button>" +
                             "</td></tr>");
     $('#DynFunctionRow').val(parseInt($("#DynFunctionRow").val()) + 1);
@@ -3542,7 +3644,9 @@ $("#2AddRowUpdate").click(function(event) {
                               }
                             }
                           ?>
-                            "</select></td><td><input class='form-control' type='textbox' value='' name='PrmProc[]'></td><td>" + 
+                            "</select></td>" + 
+                            "<td><select class='form-control' name='SenderParamProc[]''><option value='1'>Ya</option><option SELECTED value='2'>Tidak</option></select></td>" +
+                            "<td><input class='form-control' type='textbox' value='' name='PrmProc[]'></td><td>" + 
                             "<button id='DelRowProcedure' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button>" +
                             "</td></tr>");
     $('#DynProcedureRow').val(parseInt($("#DynProcedureRow").val()) + 1);
@@ -3705,7 +3809,9 @@ $("#2AddRowSearch").click(function(event) {
                               }
                             }
                           ?>
-                            "</select></td><td><input class='form-control' type='textbox' value='' name='2PrmSearch[]'></td>" + 
+                            "</select></td>" + 
+                            "<td><select class='form-control' name='SenderParamSearch[]''><option value='1'>Ya</option><option SELECTED value='2'>Tidak</option></select></td>" +
+                            "<td><input class='form-control' type='textbox' value='' name='2PrmSearch[]'></td>" + 
                             "<td><select class='form-control' name='2TypeSearch[]'><option value='='>=</option><option value='<'>&lt;</option><option value='<='>&lt;=</option><option value='>'>&gt;</option><option value='>='>&gt;=</option><option value='LIKE'>LIKE</option></select></td>" +
                             "<td><button id='2DelRowSearch' type='button' class='btn btn-info pull-right ladda-button' data-color='red' data-size='xs' data-style='zoom-out'><span class='ladda-label'><i class='fa fa-minus'></i></span> Delete Row</button></td>" +
                             "</tr>");
@@ -3861,6 +3967,14 @@ $("#3AddRowSearch").click(function(event) {
     .always(function() {
       console.log("complete");
     });
+  });
+  //
+  $('#selParamSender').on('change', function() {
+    if($(this).val()=="1"){ //yes
+      $("#form-colParamSender").fadeIn('slow');
+    }else{
+      $("#form-colParamSender").hide();
+    }
   });
 });
 </script>
