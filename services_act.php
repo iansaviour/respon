@@ -31,7 +31,7 @@ if ($type=='1') {
 				$query_inb="
 				CREATE TABLE `".$inbox_table."` (
 					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-					`id_outbox` BIGINT UNSIGNED NOT NULL,
+					`id_outbox` BIGINT UNSIGNED NOT NULL DEFAULT 0,
 					`".$inbox_content."` TEXT NULL DEFAULT NULL,
 					`".$inbox_date."` VARCHAR(255) NULL DEFAULT NULL,
 					`".$inbox_flag."` TINYINT(3) NULL DEFAULT 1,
@@ -47,7 +47,7 @@ if ($type=='1') {
 				$query_inb_serv="
 				CREATE TABLE `".$inbox_table_serv."` (
 					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-					`id_outbox` BIGINT UNSIGNED NOT NULL,
+					`id_outbox` BIGINT UNSIGNED NOT NULL DEFAULT 0,
 					`".$inbox_content."` TEXT NULL DEFAULT NULL,
 					`".$inbox_date."` VARCHAR(255) NULL DEFAULT NULL,
 					`".$inbox_flag."` TINYINT(3) NULL DEFAULT 1,
@@ -92,7 +92,9 @@ if ($type=='1') {
 								end if;
 							  END;';
 				$result_trig = mysqli_query($id_mysql,$query_trig);
-
+				//
+				$query_contact = "";
+				//
 				$query_out="
 				CREATE TABLE `".$outbox_table."` (
 					`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -102,7 +104,7 @@ if ($type=='1') {
 					`".$outbox_user."` VARCHAR(255) NULL DEFAULT NULL,
 					`".$outbox_server."` VARCHAR(255) NULL DEFAULT NULL,
 					PRIMARY KEY (`id`)
-				)
+				) 
 				COLLATE='latin1_swedish_ci'
 				ENGINE=InnoDB;
 				";
