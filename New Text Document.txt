@@ -1,0 +1,6 @@
+CREATE TABLE `db_respon`.`z_contact`(  
+  `id_contact` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100),
+  `contact` VARCHAR(200),
+  PRIMARY KEY (`id_contact`)
+);
