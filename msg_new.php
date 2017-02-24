@@ -37,6 +37,15 @@
 
     $msg = $datax["isi"];
     $server = $datax["server"];
+  }elseif(isset($_GET["contact"])){//from outbox
+    $id = $_GET["id"];
+    //
+    $query = "SELECT contact_id,id_service FROM tb_contact WHERE id_contact=$id";
+    $result = mysqli_query($id_mysql,$query);
+    $row = mysqli_fetch_array($result);
+    //
+    $recipient = $row['contact_id'];
+    $id_service = $row['id_service'];
   }
 ?>
 

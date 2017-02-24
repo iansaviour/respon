@@ -85,15 +85,13 @@ if ($type=='1') {
 									
 									if @jml_ada >= @jml_pesan then
 										SELECT GROUP_CONCAT(SUBSTRING('.$inbox_content.', INSTR('.$inbox_content.', "]") + 1) SEPARATOR "") into @msg_final FROM '.$inbox_table_serv.' where '.$inbox_content.' LIKE CONCAT("[",@pencari,"%") ORDER BY '.$inbox_content.' ASC;
-										INSERT INTO xin('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(@msg_final,new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
+										INSERT INTO '.$inbox_table.'('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(@msg_final,new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
 									end if;
 								else
-									INSERT INTO xin('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(new.'.$inbox_content.',new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
+									INSERT INTO '.$inbox_table.'('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(new.'.$inbox_content.',new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
 								end if;
 							  END;';
 				$result_trig = mysqli_query($id_mysql,$query_trig);
-				//
-				$query_contact = "";
 				//
 				$query_out="
 				CREATE TABLE `".$outbox_table."` (
@@ -167,7 +165,6 @@ if ($type=='1') {
 			CHANGE COLUMN `$data_old[inbox_server]` `$inbox_server` VARCHAR(255) NULL DEFAULT NULL AFTER `$inbox_user`
 			";
 			$result_alter_inb_serv = mysqli_query($id_mysql,$query_alter_inb_serv);
-
 			//add trigger
 			$query_trig = 'DROP TRIGGER `'.$data_old['service'].'_multipart`';
 			$result_trig = mysqli_query($id_mysql,$query_trig);
@@ -196,10 +193,10 @@ if ($type=='1') {
 								
 								if @jml_ada >= @jml_pesan then
 									SELECT GROUP_CONCAT(SUBSTRING('.$inbox_content.', INSTR('.$inbox_content.', "]") + 1) SEPARATOR "") into @msg_final FROM '.$inbox_table_serv.' where '.$inbox_content.' LIKE CONCAT("[",@pencari,"%") ORDER BY '.$inbox_content.' ASC;
-									INSERT INTO xin('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(@msg_final,new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
+									INSERT INTO '.$inbox_table.'('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(@msg_final,new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
 								end if;
 							else
-								INSERT INTO xin('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(new.'.$inbox_content.',new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
+								INSERT INTO '.$inbox_table.'('.$inbox_content.','.$inbox_date.','.$inbox_user.','.$inbox_server.') VALUES(new.'.$inbox_content.',new.'.$inbox_date.',new.'.$inbox_user.',new.'.$inbox_server.');
 							end if;
 						  END;';
 			$result_trig = mysqli_query($id_mysql,$query_trig);
@@ -321,6 +318,4 @@ if ($type=='1') {
 		echo 'Error : ',  $e->getMessage(), "<br>";
 	}
 }
-
-
 ?>
