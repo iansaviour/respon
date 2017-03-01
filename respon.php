@@ -180,9 +180,9 @@
 											$row_func = $result_func->fetch_array();
 											//output
 											$pesan = $nama_hasil.$row_func[0];
-											balas_normal($id_mysql,$sender,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$max_char);
+											balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 										}else{
-											balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 										}
 									}else{//Procedure
 										//cari procedure
@@ -204,9 +204,9 @@
 										//eksekusi
 										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 											//output
-											balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 										}else{
-											balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 										}
 									}
 								}elseif($row_kw['id_jenis_operasi']==1){//insert
@@ -237,9 +237,9 @@
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}
 								}elseif($row_kw['id_jenis_operasi']==2){//update
 									//cari update tabel
@@ -282,9 +282,9 @@
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}
 								}elseif($row_kw['id_jenis_operasi']==3){//delete
 									//cari delete tabel
@@ -311,9 +311,9 @@
 									//
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
-										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}else{
-										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 									}
 								}elseif($row_kw['id_jenis_operasi']==4){//select
 									//cari tabel
@@ -427,7 +427,7 @@
 								}
 							}else{
 								//gagal connect
-								balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server);
+								balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
 							}
 						}else{
 							//balas spam (parameter tidak sesuai jumlahnya)

@@ -205,6 +205,7 @@
 									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 										//output
 										balas_sukses($id_mysql,$sender,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
+										
 									}else{
 										balas_gagal($id_mysql,$sender,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient);
 									}

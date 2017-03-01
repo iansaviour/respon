@@ -43,7 +43,7 @@ elseif($type=='contact') {
 	// DB table to use
 	$table = "(SELECT cont.id_contact,cont.contact_name,cont.contact_id,IF(ISNULL(gd.id_contact_group),2,1) AS member,gd.id_contact_group_det,'" . $id_contact_group . "' as id_contact_group 		FROM tb_contact cont
 				LEFT JOIN tb_contact_group_det gd ON gd.id_contact=cont.id_contact AND gd.id_contact_group='".$id_contact_group."'
-				WHERE id_service=(SELECT id_service FROM tb_contact_group WHERE id_contact_group='".$id_contact_group."') AND ISNULL(gd.id_contact_group)) temp";
+				WHERE cont.id_service=(SELECT id_service FROM tb_contact_group WHERE id_contact_group='".$id_contact_group."') AND ISNULL(gd.id_contact_group)) temp";
 
 	// Table's primary key
 	$primaryKey = 'id_contact';

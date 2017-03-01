@@ -90,6 +90,8 @@
                   </div>
                 </div><!-- /.box-body -->
                 <div class="box-footer">
+                  <button style="margin-left:5px;display:none;" id="btnDelete" type="button" class="btn btn-info pull-right ladda-button" data-color="blue" data-size="xs" data-style="zoom-out"><span class="ladda-label"><i class="fa fa-trash"></i> Delete</span></button>
+                  <button style="margin-left:5px;display:none;" id="btnEdit" type="button" class="btn btn-info pull-right ladda-button" data-color="blue" data-size="xs" data-style="zoom-out"><span class="ladda-label"><i class="fa fa-pencil"></i> Edit</span></button>
                   <button style="margin-left:5px;" id="btnView" type="submit" class="btn btn-info pull-right ladda-button" data-color="blue" data-size="xs" data-style="zoom-out"><span class="ladda-label"><i class="fa fa-search"></i> View</span></button>
                 </div><!-- /.box-footer -->
             </div><!-- /.box-body -->
@@ -174,6 +176,8 @@ $(document).ready(function() {
         ]
     });
     $("#panel-contact").fadeIn('slow');
+    $("#btnEdit").fadeIn('slow');
+    $("#btnDelete").fadeIn('slow');
     <?php
   }
 ?>
@@ -205,6 +209,15 @@ $(document).ready(function() {
   });
   $("#btnAddContact").click(function(event) {
     window.location="group_contact_add.php?selCG=<?php echo $id_contact_group; ?>";
+  });
+  $("#btnEdit").click(function(event) {
+    window.location="group_contact_edit.php?selCG=<?php echo $id_contact_group; ?>";
+  });
+  $("#btnDelete").click(function(event) {
+    var r = confirm('Are you sure you want to remove this contact group?');
+    if (r == true ){
+      window.location="group_contact_act.php?t=3&selCG=<?php echo $id_contact_group; ?>";
+    }
   });
 
 });

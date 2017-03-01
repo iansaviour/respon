@@ -45,7 +45,7 @@
             </div> 
           </div><!-- /.box-body -->
           <div class="box-footer">
-            <button style="margin-left:5px;" type="button" class="btn btn-info pull-right ladda-button" data-color="blue" data-size="xs" data-style="zoom-out"><span class="ladda-label" onclick="location.href='group_contact.php?selCG=<?php echo $id_contact_group; ?>';"><i class="fa fa-door"></i> Back to group contact</span></button>
+            <button style="margin-left:5px;" id="btnBack" type="button" class="btn btn-info pull-right ladda-button" data-color="blue" data-size="xs" data-style="zoom-out"><span class="ladda-label"><i class="fa fa-arrow-left"></i> Back to contact group</span></button>
           </div><!-- /.box-footer -->
         </div>
       </div>
@@ -87,8 +87,12 @@ $(document).ready(function() {
         ]
     });
     $("#panel-contact").fadeIn('slow');
+    $("#btnBack").click(function(event) {
+      window.location="group_contact.php?selCG=<?php echo $id_contact_group; ?>";
+    });
     <?php
   }
+
 ?>
 });
 </script>

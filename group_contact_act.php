@@ -91,7 +91,7 @@ elseif($type=='contact') {
 	echo json_encode(
 	    SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
 	);	
-}elseif ($type=='2') {//delete
+}elseif ($type=='2') {//delete detail
 	$id=$_GET['id'];
 
 	try {
@@ -100,6 +100,21 @@ elseif($type=='contact') {
 		$result_del = mysqli_query($id_mysql,$query_del);
 		if($result_del){
 			header("Location:group_contact.php?selCG=" . $id_contact_group);
+		}else{
+			echo "Delete error. <a href='group_contact.php?selCG=" . $id_contact_group."'>Back to home</a>";
+		}
+	} catch (Exception $e) {
+		echo 'Error : ',  $e->getMessage(), "<br>";
+	}
+}elseif ($type=='3') {//delete grup
+	try {
+		/*remove svc*/
+		$query_del = "DELETE FROM tb_contact_group_det WHERE id_contact_group='".$id_contact_group."'";
+		$result_del = mysqli_query($id_mysql,$query_del);
+		$query_del = "DELETE FROM tb_contact_group WHERE id_contact_group='".$id_contact_group."'";
+		$result_del = mysqli_query($id_mysql,$query_del);
+		if($result_del){
+			header("Location:group_contact.php");
 		}else{
 			echo "Delete error. <a href='group_contact.php?selCG=" . $id_contact_group."'>Back to home</a>";
 		}
