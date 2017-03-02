@@ -6,7 +6,7 @@
 		$server_dev = "localhost";
 		$username_dev = "root";
 		$password_dev = "";
-		$name_dev =  "db_respon_bersih";
+		$name_dev =  "db_tes";
 		//
 		$server_host = "";
 		$username_host = "";
