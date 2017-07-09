@@ -12,13 +12,11 @@ if ($type=='1') {
 	$hostDb = makeSafe($_POST['SelDb']);
 
 	$hostNama = makeSafe($_POST['txtHostNama']);
-	$hostTelp = makeSafe($_POST['txtHostTelp']);
-	$hostEmail = makeSafe($_POST['txtHostEmail']);
 	$hostLokal = makeSafe($_POST['SelHostLokal']);
 	$hostPmsh = makeSafe($_POST['txtHostKarakter']);
 
 	try {
-		$query = "INSERT INTO tb_host(host,username,password,db,no_hp,email,nama_host,is_local,karakter_pemisah) VALUES ('$hostAdd', '$hostUsr', '$hostPass', '$hostDb', '$hostTelp', '$hostEmail', '$hostNama', '$hostLokal', '$hostPmsh')";
+		$query = "INSERT INTO tb_host(host,username,password,db,nama_host,is_local,karakter_pemisah) VALUES ('$hostAdd', '$hostUsr', '$hostPass', '$hostDb', '$hostNama', '$hostLokal', '$hostPmsh')";
 		$result = mysqli_query($id_mysql,$query);
 		if (!$result) {
 			echo"Error executing query.";

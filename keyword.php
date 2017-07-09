@@ -29,6 +29,10 @@
     $Keyw = $datax['keyword'];
     $selPub = $datax['is_publik'];
     $selLogin = $datax['penanda_login'];
+    //
+    $selReffKontak = $datax['reff_kontak'];
+    $selReffKontakTabel = $datax['reff_kontak_tabel'];
+    //
     if($selJenis == '0'){//prosedural
       $queryx = "SELECT nama_prosedural,nama_hasil FROM tb_operasi_prosedural WHERE id_operasi='".$_GET['id']."' LIMIT 1";
       $resultx = mysqli_query($id_mysql,$queryx);
@@ -57,6 +61,8 @@
     $selTb = isset($_POST['selTb']) ? $_POST['selTb'] : '';
     $selFunc = isset($_POST['selFunc']) ? $_POST['selFunc'] : '';
     $selSQL = isset($_POST['selSQL']) ? $_POST['selSQL'] : '';
+    $selReffKontak = isset($_POST['selReffKontak']) ? $_POST['selReffKontak'] : '';
+    $selReffKontakTabel = isset($_POST['selReffKontakTabel']) ? $_POST['selReffKontakTabel'] : '';
     //
     if(isset($_POST['TableSearch'])){
        $TableSearch =  $_POST['TableSearch'];
@@ -721,6 +727,37 @@
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
                     <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Kontak (Private)</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name="selReffKontak">
+                    <?php
+                    if($selTb!=''){
+                      $query = "DESC tb_contact" ;
+                      $result = mysqli_query($id_mysql,$query);
+                      while($row = $result->fetch_array()) {
+                        ?>
+                          <option <?php if($selReffKontak=='tb_contact.'.$row[0]){echo "SELECTED";} ?> value="<?php echo 'tb_contact.'.$row[0]; ?>"><?php echo 'tb_contact.'.$row[0]; ?></option>
+                        <?php
+                      }
+                    }
+                    ?>
+                  </select>
+                  <select class="form-control" name="selReffKontakTabel">
+                    <?php
+                      if($selTb!=''){
+                        $query = "DESC " . $selTb ;
+                        $result = mysqli_query($id_mysql_tb,$query);
+                        while($row = $result->fetch_array()) {
+                          ?>
+                            <option <?php if($selReffKontakTabel==$selTb .'.'.$row[0]){echo "SELECTED";} ?> value="<?php echo $selTb .'.'.$row[0]; ?>"><?php echo $selTb .'.'.$row[0]; ?></option>
+                          <?php
+                        }
+                      }
+                      ?>
                   </select>
                 </div>
               </div>
@@ -2049,7 +2086,7 @@
                       ?>
                       <tr>
                         <td>
-                          <select class="form-control" name="FieldProcc[]">
+                          <select class="form-control" name="FieldProc[]">
                             <?php
                             if($selFunc!=''){
                               $query = "SELECT CAST(param_list AS CHAR(1000) CHARACTER SET utf8) AS parameter FROM mysql.proc WHERE db = '".$data_h['db']."' AND NAME = '".$selFunc ."'";
@@ -2351,6 +2388,37 @@
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
                     <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Kontak (Private)</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name="selReffKontak">
+                    <?php
+                      $query = "DESC tb_contact" ;
+                      $result = mysqli_query($id_mysql,$query);
+                      while($row = $result->fetch_array()) {
+                        ?>
+                          <option <?php if($selReffKontak=='tb_contact.'.$row[0]){echo "SELECTED";} ?> value="<?php echo 'tb_contact.'.$row[0]; ?>"><?php echo 'tb_contact.'.$row[0]; ?></option>
+                        <?php
+                      }
+                    ?>
+                  </select>
+                  <select class="form-control" name="selReffKontakTabel">
+                    <?php
+                      if(count($TableSearch)>0){
+                        for ($i=0; $i<count($TableSearch); $i++) {
+                          $query = "DESC " . $TableSearch[$i] ;
+                          $result = mysqli_query($id_mysql_tb,$query);
+                          while($row = $result->fetch_array()) {
+                            ?>
+                              <option <?php if($selReffKontakTabel==$TableSearch[$i] .'.'.$row[0]){echo "SELECTED";} ?> value="<?php echo $TableSearch[$i] .'.'.$row[0]; ?>"><?php echo $TableSearch[$i] .'.'.$row[0]; ?></option>
+                            <?php
+                          }
+                        }
+                      }
+                      ?>
                   </select>
                 </div>
               </div>

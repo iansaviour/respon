@@ -105,7 +105,27 @@
               <div class="form-group">
                 <label for="input-recipient" class="col-sm-2 control-label">Recipient</label>
                 <div class="col-sm-10">
-                  <input type="textbox" class="form-control" id="input-recipient" name="txtRecipient" placeholder="Penerima pesan, pisahkan dengan ; " value="<?php echo $recipient; ?>">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" id="input-recipients" name="txtRecipient" placeholder="Penerima pesan, pisahkan dengan ; " value="<?php echo $recipient; ?>">
+                    <span class="input-group-btn">
+                      <button class="btn btn-info btn-flat" id="btnKontak" type="button">Kontak</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" id="divKontak" style="display:none;">
+                <label for="input-recipient" class="col-sm-2 control-label">Kontak</label>
+                <div class="col-sm-10">
+                  <table class="table table-striped" id="contact" class="display" cellspacing="0" width="100%" style="overflow-X: scroll;">
+                    <thead>
+                      <tr>
+                        <th>Id Contact</th>
+                        <th>Contact Name</th>
+                        <th>Contact ID</th>
+                        <th>Option</th>
+                      </tr>
+                    </thead>
+                  </table>
                 </div>
               </div>
               <div class="form-group">
@@ -142,6 +162,28 @@ $(document).ready(function() {
       <?php
     }
   ?>
+  $('#contact').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax": "msg_new_act.php?t=contact",
+      "order": [[ 0, "desc" ]],
+      "columnDefs": [
+          {
+              "targets": [ 0 ],
+              "visible": false
+          }
+      ]
+  });
+  $("#btnKontak").click(function(event) {
+      if($("#divKontak").css('display') == "none"){
+        $("#divKontak").fadeIn("slow");
+        $("#btnKontak").text("Tutup Kontak");
+      }else{
+        $("#divKontak").fadeOut("slow");
+        $("#btnKontak").text("Kontak");
+      }
+      
+  });
   $("#btnSave").click(function(event) {
       var l = Ladda.create( document.querySelector( '#btnSave' ) );
       l.start();
@@ -168,6 +210,9 @@ $(document).ready(function() {
         console.log("complete");
       });
     });
-
 });
+function tes(id){
+  var text = document.getElementById('input-recipients');
+  text.value = (text.value + id + ';');
+}
 </script>

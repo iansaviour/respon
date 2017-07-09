@@ -38,12 +38,12 @@
 			$result = mysqli_query($id_mysql,$query);
 		}
 	}
-	function balas_gagal($id_mysql,$sender_var,$server_var,$pesan_gagal_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server){
+	function balas_gagal($id_mysql,$sender_var,$server_var,$pesan_gagal_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_server,$nm_fl_recipient){
 		$query="INSERT INTO " .$nm_tbl_outb. "(" .$nm_fl_msg. "," .$nm_fl_date. "," .$nm_fl_recipient. "," .$nm_fl_server. ") VALUES('".$pesan_gagal_var."',NOW(),'".$sender_var."','".$server_var."')";
 		//echo $query . "<br>";
 		$result = mysqli_query($id_mysql,$query);
 	}
-	function balas_sukses($id_mysql,$sender_var,$server_var,$pesan_sukses_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server){
+	function balas_sukses($id_mysql,$sender_var,$server_var,$pesan_sukses_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_server,$nm_fl_recipient){
 		$query="INSERT INTO " .$nm_tbl_outb. "(" .$nm_fl_msg. "," .$nm_fl_date. "," .$nm_fl_recipient. "," .$nm_fl_server. ") VALUES('".$pesan_sukses_var."',NOW(),'".$sender_var."','".$server_var."')";
 		//echo $query . "<br>";
 		$result = mysqli_query($id_mysql,$query);
@@ -53,20 +53,22 @@
 	$pesan_spam = '';
     $pesan_gagal = '';
     $pesan_sukses = '';
-    $keyword_host = '';
+    //$keyword_host = '';
     $balas_spam = '';
 	//
 	//$query="INSERT INTO tb_log_respon(log,datetime) VALUES('Response successfully executed',NOW())";
 	//$result = mysqli_query($id_mysql,$query);
 	//cari parameter option
-	$query= "SELECT char_pemisah,pesan_spam,pesan_gagal,pesan_sukses,keyword_host,balas_spam FROM tb_option LIMIT 1";
+	//$query= "SELECT char_pemisah,pesan_spam,pesan_gagal,pesan_sukses,keyword_host,balas_spam FROM tb_option LIMIT 1";
+	$query= "SELECT char_pemisah,pesan_spam,pesan_gagal,pesan_sukses,balas_spam,pesan_private FROM tb_option LIMIT 1";
 	$result = mysqli_query($id_mysql,$query);
 	$data = mysqli_fetch_array($result);
     $char_pemisah = $data['char_pemisah'];
     $pesan_spam = $data['pesan_spam'];
     $pesan_gagal = $data['pesan_gagal'];
     $pesan_sukses = $data['pesan_sukses'];
-    $keyword_host = $data['keyword_host'];
+    $pesan_private = $data['pesan_private'];
+    //$keyword_host = $data['keyword_host'];
     $balas_spam = $data['balas_spam'];
     //loop setiap service
 	$queryx = "SELECT * FROM tb_service";
@@ -119,6 +121,7 @@
 				$host_id_outbox = '';
 				$jenis_pesan = ''; //1=nothing,2=host
 
+				/*
 				if(strtoupper($msg_array[0])==$keyword_host){//host first
 					$jenis_pesan = '2';
 					$host_id_outbox = $msg_array[1];
@@ -129,11 +132,12 @@
 					$parameter = substr($message, strlen($keyword_host . $char_pemisah . $host_id_outbox . $char_pemisah . $keyword . $char_pemisah));
 					$parameter_array = explode($char_pemisah,$parameter);
 				}else{
+				*/
 					$jenis_pesan = '1';
 					$keyword = $msg_array[0];
 					$parameter = substr($message, strlen($keyword . $char_pemisah));
 					$parameter_array = explode($char_pemisah,$parameter);
-				}
+				//}
 				//olah
 				if(strlen($keyword) > 0){
 					//search for keyword
@@ -277,14 +281,44 @@
 										$i++;
 										$j++;
 									}
-									//eksekusi
-									$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
-									//
-									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
-										//output
-										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+									//cek private or publik, boleh atau tidak
+									$allowed_keyword = 1;
+									if($row_kw['is_publik']==0){
+										//cari penanda kontak
+										$rk = $row_kw['reff_kontak'];
+										$query_pk = "SELECT " . $rk . " FROM tb_contact WHERE contact_id='".$sender."' LIMIT 1";
+										$result_pk = mysqli_query($id_mysql,$query_pk);
+										$row_pk = $result_pk->fetch_array();
+										$pk = $row_pk[0];
+										//cari penanda tabel
+										$rt = $row_kw['reff_kontak_tabel'];
+										$query_pt = "SELECT " . $rt . " FROM ".$nama_tabel." WHERE ".$kunci_par." LIMIT 1";
+										$result_pt = mysqli_query($id_mysql_host,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$pt = $row_pt[0];
+										$ptc = mysqli_num_rows($result_pt);
+										//jika tidak sama = 2
+										if($ptc>1){
+											$allowed_keyword = 2;
+										}elseif($pk==$pt){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
+									}
+									if($allowed_keyword==1){
+										//eksekusi
+										$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
+										//
+										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
+											//output
+											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}else{
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}
 									}else{
-										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										//pesan private
+										balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 									}
 								}elseif($row_kw['id_jenis_operasi']==3){//delete
 									//cari delete tabel
@@ -384,46 +418,76 @@
 
 									//full query
 									$full_query = "SELECT " . $output_par . " FROM " . $table_par . " WHERE 1=1 " . $join_par . $where_par . $order_par;
-									//echo $full_query;
-									//select hasilnya
-									$query_result = $full_query;
-									$result_result = mysqli_query($id_mysql_host,$query_result);
-									$result_par="";
-									$j=0;
-									while($row_result = $result_result->fetch_array()) {
-										if($j>0){
-											$result_par = $result_par . $pemisah_baris;
+									//cek private or publik, boleh atau tidak
+									$allowed_keyword = 1;
+									if($row_kw['is_publik']==0){
+										//cari penanda kontak
+										$rk = $row_kw['reff_kontak'];
+										$query_pk = "SELECT " . $rk . " FROM tb_contact WHERE contact_id='".$sender."' LIMIT 1";
+										$result_pk = mysqli_query($id_mysql,$query_pk);
+										$row_pk = $result_pk->fetch_array();
+										$pk = $row_pk[0];
+										//cari penanda tabel
+										$rt = $row_kw['reff_kontak_tabel'];
+										$query_pt = "SELECT " . $rt . " FROM " . $table_par . " WHERE 1=1 " . $join_par . $where_par . " GROUP BY ". $rt ." " . $order_par;
+										$result_pt = mysqli_query($id_mysql_host,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$pt = $row_pt[0];
+										$ptc = mysqli_num_rows($result_pt);
+										//jika tidak sama = 2
+										if($ptc>1){
+											$allowed_keyword = 2;
+										}elseif($pk==$pt){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
+									}
+									if($allowed_keyword==1){
+										//echo $full_query;
+										//select hasilnya
+										$query_result = $full_query;
+										$result_result = mysqli_query($id_mysql_host,$query_result);
+										$result_par="";
+										$j=0;
+										while($row_result = $result_result->fetch_array()) {
+											if($j>0){
+												$result_par = $result_par . $pemisah_baris;
+											}
+											//
+											$i=0;
+											$query_output = "SELECT output,nama_output,jenis_output FROM tb_operasi_output WHERE id_operasi='".$id_operasi."'";
+											$result_output = mysqli_query($id_mysql,$query_output);
+											while($row_output = $result_output->fetch_array()) {
+												$result_string = "";
+												//output is string,integer, or currency
+												if($row_output['jenis_output'] == "2"){//number
+													$result_string = number_format($row_result[$i], 2, ',', '.');
+												}elseif($row_output['jenis_output'] == "3"){//currency
+													$result_string = "Rp. " . number_format($row_result[$i], 2, ',', '.');
+												}else{//string
+													$result_string = $row_result[$i];
+												}
+												if($i>0){
+													$result_par = $result_par . $pemisah_kolom . $row_output['nama_output'] . $result_string;
+												}else{
+													$result_par = $result_par . $row_output['nama_output'] . $result_string;
+												}
+												$i++;
+											}
+											$j++;
 										}
 										//
-										$i=0;
-										$query_output = "SELECT output,nama_output,jenis_output FROM tb_operasi_output WHERE id_operasi='".$id_operasi."'";
-										$result_output = mysqli_query($id_mysql,$query_output);
-										while($row_output = $result_output->fetch_array()) {
-											$result_string = "";
-											//output is string,integer, or currency
-											if($row_output['jenis_output'] == "2"){//number
-												$result_string = number_format($row_result[$i], 2, ',', '.');
-											}elseif($row_output['jenis_output'] == "3"){//currency
-												$result_string = "Rp. " . number_format($row_result[$i], 2, ',', '.');
-											}else{//string
-												$result_string = $row_result[$i];
-											}
-											if($i>0){
-												$result_par = $result_par . $pemisah_kolom . $row_output['nama_output'] . $result_string;
-											}else{
-												$result_par = $result_par . $row_output['nama_output'] . $result_string;
-											}
-											$i++;
+										if($j==0){
+											$pesan="Data tidak ditemukan.";
+										}else{
+											$pesan=$result_par;
 										}
-										$j++;
-									}
-									//
-									if($j==0){
-										$pesan="Data tidak ditemukan.";
+										balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 									}else{
-										$pesan=$result_par;
+										//pesan private
+										balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 									}
-									balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 								}
 							}else{
 								//gagal connect

@@ -89,8 +89,14 @@ if ($type=='1') {//insert Insert
 	$nama_operasi = isset($_POST['NmKeyw']) ? makeSafe($_POST['NmKeyw']) : '';
 	$penanda_login = isset($_POST['selLogin']) ? makeSafe($_POST['selLogin']) : '';
 	//
+	$penanda_konta = isset($_POST['selPub']) ? makeSafe($_POST['selPub']) : '';
+	$is_publik = isset($_POST['selPub']) ? makeSafe($_POST['selPub']) : '';
+	//
+	$reff_kontak = isset($_POST['selReffKontak']) ? makeSafe($_POST['selReffKontak']) : '';
+	$reff_kontak_tabel = isset($_POST['selReffKontakTabel']) ? makeSafe($_POST['selReffKontakTabel']) : '';
+	//
 	$nama_table = isset($_POST['selTb']) ? makeSafe($_POST['selTb']) : '';
-	$jml_row_param = isset($_POST['DynUpdateRow']) ? makeSafe($_POST['DynUpdateRow']) : '';
+	$jml_row_param = isset($_POST['DynUpdatetRow']) ? makeSafe($_POST['DynUpdateRow']) : '';
 	//
 	$FieldUpd = isset($_POST['FieldUpd']) ? $_POST['FieldUpd'] : '';
 	$PrmUpd = isset($_POST['PrmUpd']) ? $_POST['PrmUpd'] : '';
@@ -99,7 +105,7 @@ if ($type=='1') {//insert Insert
 	$PrmUpd2 = isset($_POST['2PrmUpd']) ? $_POST['2PrmUpd'] : '';
 	$TypeUpd2 = isset($_POST['2TypeUpd']) ? $_POST['2TypeUpd'] : '';
 	try {
-		$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login')";
+		$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login,reff_kontak,reff_kontak_tabel) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login','$reff_kontak','$reff_kontak_tabel')";
 		$result = mysqli_query($id_mysql,$query);
 		if($result) {
 			$id_last = mysqli_insert_id($id_mysql);
@@ -135,6 +141,9 @@ if ($type=='1') {//insert Insert
 	$nama_operasi = isset($_POST['NmKeyw']) ? makeSafe($_POST['NmKeyw']) : '';
 	$penanda_login = isset($_POST['selLogin']) ? makeSafe($_POST['selLogin']) : '';
 	//
+	$reff_kontak = isset($_POST['selReffKontak']) ? makeSafe($_POST['selReffKontak']) : '';
+	$reff_kontak_tabel = isset($_POST['selReffKontakTabel']) ? makeSafe($_POST['selReffKontakTabel']) : '';
+	//
 	$nama_table = isset($_POST['selTb']) ? makeSafe($_POST['selTb']) : '';
 	$jml_row_param = isset($_POST['DynUpdatetRow']) ? makeSafe($_POST['DynUpdateRow']) : '';
 	//
@@ -145,7 +154,7 @@ if ($type=='1') {//insert Insert
 	$PrmUpd2 = isset($_POST['2PrmUpd']) ? $_POST['2PrmUpd'] : '';
 	$TypeUpd2 = isset($_POST['2TypeUpd']) ? $_POST['2TypeUpd'] : '';
 	try {
-		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login' WHERE id_operasi='$id_operasi'";
+		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login',reff_kontak='$reff_kontak',reff_kontak_tabel='$reff_kontak_tabel' WHERE id_operasi='$id_operasi'";
 		$result = mysqli_query($id_mysql,$query);
 		if($result) {
 			//table
@@ -427,6 +436,9 @@ if ($type=='1') {//insert Insert
 	$nama_operasi = isset($_POST['NmKeyw']) ? makeSafe($_POST['NmKeyw']) : '';
 	$penanda_login = isset($_POST['selLogin']) ? makeSafe($_POST['selLogin']) : '';
 	//
+	$reff_kontak = isset($_POST['selReffKontak']) ? makeSafe($_POST['selReffKontak']) : '';
+	$reff_kontak_tabel = isset($_POST['selReffKontakTabel']) ? makeSafe($_POST['selReffKontakTabel']) : '';
+	//
 	$TableSearch = isset($_POST['TableSearch']) ? $_POST['TableSearch'] : '';
 	//
 	$FieldSearch = isset($_POST['FieldSearch']) ? $_POST['FieldSearch'] : '';
@@ -443,7 +455,7 @@ if ($type=='1') {//insert Insert
 	$Join1Search = isset($_POST['Join1Search']) ? $_POST['Join1Search'] : '';
 	$Join2Search = isset($_POST['Join2Search']) ? $_POST['Join2Search'] : '';
 	try {
-		$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login')";
+		$query = "INSERT INTO tb_operasi(id_host,id_jenis_operasi,id_jenis_sql,keyword,is_publik,nama_operasi,penanda_login,reff_kontak,reff_kontak_tabel) VALUES ('$id_host','$id_jenis_operasi','$id_jenis_sql','$keyword','$is_publik','$nama_operasi','$penanda_login','$reff_kontak','$reff_kontak_tabel')";
 		$result = mysqli_query($id_mysql,$query);
 		if($result) {
 			$id_last = mysqli_insert_id($id_mysql);
@@ -482,7 +494,7 @@ if ($type=='1') {//insert Insert
 	}catch (Exception $e) {
 		echo 'Error : ',  $e->getMessage(), "<br>";
 	}	
-}elseif ($type=='6edit') {//insert Search
+}elseif ($type=='6edit') {//update Search
 	$id_operasi = isset($_POST['idOperasi']) ? makeSafe($_POST['idOperasi']) : '';
 	$id_host = isset($_POST['selHost']) ? makeSafe($_POST['selHost']) : '';
 	$id_jenis_operasi = isset($_POST['selJenis']) ? makeSafe($_POST['selJenis']) : '';
@@ -492,6 +504,9 @@ if ($type=='1') {//insert Insert
 	$is_publik = isset($_POST['selPub']) ? makeSafe($_POST['selPub']) : '';
 	$nama_operasi = isset($_POST['NmKeyw']) ? makeSafe($_POST['NmKeyw']) : '';
 	$penanda_login = isset($_POST['selLogin']) ? makeSafe($_POST['selLogin']) : '';
+	//
+	$reff_kontak = isset($_POST['selReffKontak']) ? makeSafe($_POST['selReffKontak']) : '';
+	$reff_kontak_tabel = isset($_POST['selReffKontakTabel']) ? makeSafe($_POST['selReffKontakTabel']) : '';
 	//
 	$TableSearch = isset($_POST['TableSearch']) ? $_POST['TableSearch'] : '';
 	//
@@ -509,7 +524,7 @@ if ($type=='1') {//insert Insert
 	$Join1Search = isset($_POST['Join1Search']) ? $_POST['Join1Search'] : '';
 	$Join2Search = isset($_POST['Join2Search']) ? $_POST['Join2Search'] : '';
 	try {
-		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login' WHERE id_operasi='$id_operasi'";
+		$query = "UPDATE tb_operasi SET id_host='$id_host',id_jenis_operasi='$id_jenis_operasi',id_jenis_sql='$id_jenis_sql',keyword='$keyword',is_publik='$is_publik',nama_operasi='$nama_operasi',penanda_login='$penanda_login',reff_kontak='$reff_kontak',reff_kontak_tabel='$reff_kontak_tabel' WHERE id_operasi='$id_operasi'";
 		$result = mysqli_query($id_mysql,$query);
 		if($result) {
 			//table

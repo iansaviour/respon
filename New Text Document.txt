@@ -4,3 +4,5 @@ CREATE TABLE `db_respon`.`z_contact`(
   `contact` VARCHAR(200),
   PRIMARY KEY (`id_contact`)
 );
+
+BL2(BwAAAAD8tAknFAewEBG9XgjBAUEAwf///////////38DQQghAME=)

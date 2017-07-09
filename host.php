@@ -253,18 +253,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="input-host" class="col-sm-2 control-label">Nomor Telepon Host</label>
-                <div class="col-sm-10">
-                  <input type="textbox" class="form-control" id="input-host" name="txtHostTelp" placeholder="+628..." value="">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="input-host" class="col-sm-2 control-label">Email Host</label>
-                <div class="col-sm-10">
-                  <input type="textbox" class="form-control" id="input-host" name="txtHostEmail" placeholder="example@example.com" value="">
-                </div>
-              </div>
-              <div class="form-group">
                 <label for="input-host" class="col-sm-2 control-label">Host Lokal</label>
                 <div class="col-sm-10">
                   <select class="form-control" id="SelHostLokal" name="SelHostLokal">

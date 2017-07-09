@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="dist/css/own.css">
@@ -154,6 +156,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="broadcast.php"><i class="fa fa-bullhorn"></i> Broadcast </a></li>
+                <li><a href="schedule_bc.php"><i class="fa fa-bullhorn"></i> Schedule Broadcast </a></li>
                 <li><a href="msg_new.php"><i class="fa fa-envelope"></i> New Message </a></li>
                 <li><a href="msg_inbox.php"><i class="fa fa-download"></i> Inbox </a></li>
                 <li><a href="msg_outbox.php"><i class="fa fa-upload"></i> Outbox </a></li>
