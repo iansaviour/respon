@@ -78,6 +78,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label for="input-inbox-table" class="col-sm-2 control-label">Pesan Data Private</label>
+                <div class="col-sm-10">
+                  <input type="textbox" class="form-control" id="input-inbox-table" name="pesan_private" placeholder="#" value="<?php echo $data['pesan_private']; ?>">
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="input-inbox-table" class="col-sm-2 control-label">PHP.exe location</label>
                 <div class="col-sm-10">
                   <input type="textbox" class="form-control" id="input-inbox-table" name="txtphpexe" placeholder="PHP.exe location" value="<?php echo $data['phpexe_loc']; ?>">

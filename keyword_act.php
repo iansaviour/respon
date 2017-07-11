@@ -620,8 +620,10 @@ INNER JOIN tb_jenis_operasi jop ON jop.id_jenis_operasi=op.id_jenis_operasi) tem
 	    	   'formatter' => function( $d, $row ) {
 		            if($d == "1"){
 		            	return "Publik";
+		            }elseif($d == "2"){
+		            	return "Private";
 		            }else{
-		            	return "Privat";
+		            	return "Private (Row Basis)";
 		            }
 		        }
 	    ),

@@ -15,8 +15,9 @@ if ($type=='1') {
 	$pesan_spam = isset($_POST['pesan_spam']) ? makeSafe($_POST['pesan_spam']) : '';
 	$pesan_gagal = isset($_POST['pesan_gagal']) ? makeSafe($_POST['pesan_gagal']) : '';
 	$pesan_sukses = isset($_POST['pesan_sukses']) ? makeSafe($_POST['pesan_sukses']) : '';
+	$pesan_private = isset($_POST['pesan_private']) ? makeSafe($_POST['pesan_private']) : '';
 	try {
-		$query = "UPDATE tb_option SET respon_loc='$respon',phpexe_loc='$phpexe',rentang_min='$rentang_min',char_pemisah='$char_pemisah',balas_spam='$balas_spam',pesan_spam='$pesan_spam',pesan_gagal='$pesan_gagal',pesan_sukses='$pesan_sukses'";
+		$query = "UPDATE tb_option SET respon_loc='$respon',phpexe_loc='$phpexe',rentang_min='$rentang_min',char_pemisah='$char_pemisah',balas_spam='$balas_spam',pesan_spam='$pesan_spam',pesan_gagal='$pesan_gagal',pesan_sukses='$pesan_sukses',pesan_private='$pesan_private'";
 		$result = mysqli_query($id_mysql,$query);
 		if (!$result) {
 			echo"Error executing query.";

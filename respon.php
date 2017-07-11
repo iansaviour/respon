@@ -177,16 +177,35 @@
 												$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
 											}
 										}
-										$query_exec = "SELECT ".$nama_function."(".$exec_par.")";
+										
+										//cek private or publik, boleh atau tidak
+										$allowed_keyword = 1;
+										if($row_kw['is_publik']==2){
+											$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+											$result_pt = mysqli_query($id_mysql,$query_pt);
+											$row_pt = $result_pt->fetch_array();
+											$ptc = mysqli_num_rows($result_pt);
+											if($ptc>0){
+												$allowed_keyword = 1;
+											}else{
+												$allowed_keyword = 2;
+											}
+										}
+										if($allowed_keyword == 1){
+											$query_exec = "SELECT ".$nama_function."(".$exec_par.")";
 
-										//eksekusi
-										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
-											$row_func = $result_func->fetch_array();
-											//output
-											$pesan = $nama_hasil.$row_func[0];
-											balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
+											//eksekusi
+											if($result_func = mysqli_query($id_mysql_host,$query_exec)){
+												$row_func = $result_func->fetch_array();
+												//output
+												$pesan = $nama_hasil.$row_func[0];
+												balas_normal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
+											}else{
+												balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+											}
 										}else{
-											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+											//pesan private
+											balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 										}
 									}else{//Procedure
 										//cari procedure
@@ -203,14 +222,33 @@
 												$exec_par = $exec_par . "'" . $parameter_array[$i] . "'";
 											}
 										}
-										$query_exec = "CALL ".$nama_procedure."(".$exec_par.")";
 
-										//eksekusi
-										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
-											//output
-											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										//cek private or publik, boleh atau tidak
+										$allowed_keyword = 1;
+										if($row_kw['is_publik']==2){
+											$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+											$result_pt = mysqli_query($id_mysql,$query_pt);
+											$row_pt = $result_pt->fetch_array();
+											$ptc = mysqli_num_rows($result_pt);
+											if($ptc>0){
+												$allowed_keyword = 1;
+											}else{
+												$allowed_keyword = 2;
+											}
+										}
+										if($allowed_keyword == 1){
+											$query_exec = "CALL ".$nama_procedure."(".$exec_par.")";
+
+											//eksekusi
+											if($result_func = mysqli_query($id_mysql_host,$query_exec)){
+												//output
+												balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+											}else{
+												balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+											}
 										}else{
-											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+											//pesan private
+											balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 										}
 									}
 								}elseif($row_kw['id_jenis_operasi']==1){//insert
@@ -236,14 +274,32 @@
 										}
 										$j++;
 									}
-									//eksekusi
-									$query_exec = "INSERT INTO ".$nama_tabel."(".$param_par.") VALUES(".$value_par.")";
-									//
-									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
-										//output
-										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+									//cek private or publik, boleh atau tidak
+									$allowed_keyword = 1;
+									if($row_kw['is_publik']==2){
+										$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+										$result_pt = mysqli_query($id_mysql,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$ptc = mysqli_num_rows($result_pt);
+										if($ptc>0){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
+									}
+									if($allowed_keyword == 1){
+										//eksekusi
+										$query_exec = "INSERT INTO ".$nama_tabel."(".$param_par.") VALUES(".$value_par.")";
+										//
+										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
+											//output
+											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}else{
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}
 									}else{
-										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										//pesan private
+										balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 									}
 								}elseif($row_kw['id_jenis_operasi']==2){//update
 									//cari update tabel
@@ -292,7 +348,7 @@
 										$pk = $row_pk[0];
 										//cari penanda tabel
 										$rt = $row_kw['reff_kontak_tabel'];
-										$query_pt = "SELECT " . $rt . " FROM ".$nama_tabel." WHERE ".$kunci_par." LIMIT 1";
+										$query_pt = "SELECT " . $rt . " FROM ".$nama_tabel." WHERE ".$kunci_par." GROUP BY " . $rt;
 										$result_pt = mysqli_query($id_mysql_host,$query_pt);
 										$row_pt = $result_pt->fetch_array();
 										$pt = $row_pt[0];
@@ -305,7 +361,18 @@
 										}else{
 											$allowed_keyword = 2;
 										}
+									}elseif($row_kw['is_publik']==2){
+										$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+										$result_pt = mysqli_query($id_mysql,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$ptc = mysqli_num_rows($result_pt);
+										if($ptc>0){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
 									}
+
 									if($allowed_keyword==1){
 										//eksekusi
 										$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
@@ -340,14 +407,32 @@
 										}
 										$j++;
 									}
-									//eksekusi
-									$query_exec = "DELETE FROM ".$nama_tabel." WHERE " . $kunci_par;
-									//
-									if($result_func = mysqli_query($id_mysql_host,$query_exec)){
-										//output
-										balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+									//cek private or publik, boleh atau tidak
+									$allowed_keyword = 1;
+									if($row_kw['is_publik']==2){
+										$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+										$result_pt = mysqli_query($id_mysql,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$ptc = mysqli_num_rows($result_pt);
+										if($ptc>0){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
+									}
+									if($allowed_keyword == 1){
+										//eksekusi
+										$query_exec = "DELETE FROM ".$nama_tabel." WHERE " . $kunci_par;
+										//
+										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
+											//output
+											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}else{
+											balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										}
 									}else{
-										balas_gagal($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_gagal,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
+										//pesan private
+										balas_normal($id_mysql,$sender,$server_inb,$pesan_private,$outbox_table,$outbox_isi,$outbox_date,$outbox_recipient,$outbox_server,$max_char);
 									}
 								}elseif($row_kw['id_jenis_operasi']==4){//select
 									//cari tabel
@@ -442,7 +527,18 @@
 										}else{
 											$allowed_keyword = 2;
 										}
+									}elseif($row_kw['is_publik']==2){
+										$query_pt = "SELECT * FROM tb_contact WHERE contact_id='" . $sender . "'";
+										$result_pt = mysqli_query($id_mysql,$query_pt);
+										$row_pt = $result_pt->fetch_array();
+										$ptc = mysqli_num_rows($result_pt);
+										if($ptc>0){
+											$allowed_keyword = 1;
+										}else{
+											$allowed_keyword = 2;
+										}
 									}
+
 									if($allowed_keyword==1){
 										//echo $full_query;
 										//select hasilnya

@@ -10,7 +10,7 @@
   $NmKeyw = '';
   $Keyw = '';
   $selPub = '1';
-  $selLogin = '1';
+  $selLogin = '2';
   $selSQL = '1';
   //
   $NmOutput = '';
@@ -384,7 +384,7 @@
                 <div class="col-sm-10">
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
                   </select>
                 </div>
               </div>
@@ -724,14 +724,15 @@
               <div class="form-group">
                 <label for="input-service" class="col-sm-2 control-label">Keyword Publik</label>
                 <div class="col-sm-10">
-                  <select class="form-control" name="selPub">
+                  <select class="form-control" name="selPub" id="UpdselPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
+                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private (Row Basis)</option>
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Kontak (Private)</label>
+              <div class="form-group" id="UpdReffKontak" <?php if($selPub=='0'){echo 'style="display:block;"';}else{echo 'style="display:none;"';} ?>>
+                <label for="input-service" class="col-sm-2 control-label" >Referensi Tabel Kontak</label>
                 <div class="col-sm-10">
                   <select class="form-control" name="selReffKontak">
                     <?php
@@ -746,6 +747,11 @@
                     }
                     ?>
                   </select>
+                </div>
+              </div>
+              <div class="form-group" id="UpdReffTable" <?php if($selPub=='0'){echo 'style="display:block;"';}else{echo 'style="display:none;"';} ?>>
+                <label for="input-service" class="col-sm-2 control-label" >Referensi Tabel Tujuan</label>
+                <div class="col-sm-10">
                   <select class="form-control" name="selReffKontakTabel">
                     <?php
                       if($selTb!=''){
@@ -1226,7 +1232,7 @@
                 <div class="col-sm-10">
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
                   </select>
                 </div>
               </div>
@@ -1681,7 +1687,7 @@
                 <div class="col-sm-10">
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
                   </select>
                 </div>
               </div>
@@ -2052,7 +2058,7 @@
                 <div class="col-sm-10">
                   <select class="form-control" name="selPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
                   </select>
                 </div>
               </div>
@@ -2385,14 +2391,15 @@
               <div class="form-group">
                 <label for="input-service" class="col-sm-2 control-label">Keyword Publik</label>
                 <div class="col-sm-10">
-                  <select class="form-control" name="selPub">
+                  <select class="form-control" name="selPub" id="SearchselPub">
                     <option <?php if($selPub=='1'){echo "SELECTED";} ?> value="1">Publik</option>
-                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private</option>
+                    <option <?php if($selPub=='2'){echo "SELECTED";} ?> value="2">Private</option>
+                    <option <?php if($selPub=='0'){echo "SELECTED";} ?> value="0">Private (Row Basis)</option>
                   </select>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Kontak (Private)</label>
+              <div class="form-group" id="SearchReffKontak" <?php if($selPub=='0'){echo 'style="display:block;"';}else{echo 'style="display:none;"';} ?>>
+                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Kontak</label>
                 <div class="col-sm-10">
                   <select class="form-control" name="selReffKontak">
                     <?php
@@ -2405,6 +2412,11 @@
                       }
                     ?>
                   </select>
+                </div>
+              </div>
+              <div class="form-group" id="SearchReffTable" <?php if($selPub=='0'){echo 'style="display:block;"';}else{echo 'style="display:none;"';} ?>>
+                <label for="input-service" class="col-sm-2 control-label">Referensi Tabel Tujuan</label>
+                <div class="col-sm-10">
                   <select class="form-control" name="selReffKontakTabel">
                     <?php
                       if(count($TableSearch)>0){
@@ -3930,5 +3942,23 @@ $("#3AddRowSearch").click(function(event) {
       console.log("complete");
     });
   });
+});
+document.getElementById('SearchselPub').addEventListener('change', function() {
+    if (this.value == '0') {
+        document.getElementById('SearchReffTable').style.display = "block";
+        document.getElementById('SearchReffKontak').style.display = "block";
+    } else {
+        document.getElementById('SearchReffTable').style.display = "none";
+        document.getElementById('SearchReffKontak').style.display = "none";
+    }
+});
+document.getElementById('UpdselPub').addEventListener('change', function() {
+    if (this.value == '0') {
+        document.getElementById('UpdReffTable').style.display = "block";
+        document.getElementById('UpdReffKontak').style.display = "block";
+    } else {
+        document.getElementById('UpdReffTable').style.display = "none";
+        document.getElementById('UpdReffKontak').style.display = "none";
+    }
 });
 </script>
