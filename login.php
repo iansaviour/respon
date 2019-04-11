@@ -37,7 +37,7 @@ if(!isset($_GET['code'])){
   <body class="hold-transition login-page">
     <div class="login-box">
       <div class="login-logo">
-        <a href="#"><b>admin</b>Panel</a>
+        <a href="#"><b>Autoresponder</b>Engine</a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>

@@ -2,13 +2,22 @@
 	include 'includes/koneksi.php';
 	include 'includes/function.php';
 
+	$date_tmp = date("Y-m-d");
+	$hr_tmp = date("H:i:s");
+
 	function add_log($data,$id_mysql){ //log respon
 		$query="INSERT INTO tb_log_respon(log,datetime) VALUES('".$data."',NOW())";
 		//echo $query . "<br>";
 		$result = mysqli_query($id_mysql,$query);
 	}
-	function balas_normal($id_mysql,$sender_var,$server_var,$pesan_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server,$max_char_var){
-		
+	function send_pesan($id_mysql,$pesan_var,$id_kontak){
+		$query= "SELECT * FROM tb_contact ct INNER JOIN tb_service serv ON serv.id_service=ct.id_service WHERE `id_contact`='" . $id_kontak . "'";
+		$result = mysqli_query($id_mysql,$query);
+		$data = mysqli_fetch_array($result);
+
+		balas_normal($id_mysql,$data['contact_id'],"",$pesan_var,$data['outbox_table'],$data['outbox_content'],$data['outbox_date'],$data['outbox_recipient'],$data['outbox_server'],$data['max_char']);
+	}
+	function balas_normal($id_mysql,$sender_var,$server_var,$pesan_var,$nm_tbl_outb,$nm_fl_msg,$nm_fl_date,$nm_fl_recipient,$nm_fl_server,$max_char_var){	
 		if(strlen($pesan_var)>$max_char_var){
 			//bagi
 			//$kode_unik = "[" . time() . "_" . "xxx" . "_" . "xxx" . "]";
@@ -329,14 +338,25 @@
 									$kunci_par = '';
 									$j=0;
 									while($row_kunci = $result_kunci->fetch_array()) {
-										if($j>0){
-											$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i]. "'";
+										if($row_kunci['type']=='LIKE'){
+											if($j>0){
+												$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$i]. "%'";
+											}else{
+												$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$i] . "%'";
+											}
 										}else{
-											$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i] . "'";
+											if($j>0){
+												$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i]. "'";
+											}else{
+												$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$i] . "'";
+											}
 										}
+										
 										$i++;
 										$j++;
 									}
+									//eksekusi
+									$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
 									//cek private or publik, boleh atau tidak
 									$allowed_keyword = 1;
 									if($row_kw['is_publik']==0){
@@ -354,8 +374,11 @@
 										$pt = $row_pt[0];
 										$ptc = mysqli_num_rows($result_pt);
 										//jika tidak sama = 2
-										if($ptc>1){
-											$allowed_keyword = 2;
+										if($ptc==0){
+											$allowed_keyword = 1;
+										}elseif($ptc>1){
+											$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par . " AND " . $rt  . "=" . $pk;
+											$allowed_keyword = 1;
 										}elseif($pk==$pt){
 											$allowed_keyword = 1;
 										}else{
@@ -372,11 +395,7 @@
 											$allowed_keyword = 2;
 										}
 									}
-
 									if($allowed_keyword==1){
-										//eksekusi
-										$query_exec = "UPDATE ".$nama_tabel." SET ".$value_par."  WHERE " . $kunci_par;
-										//
 										if($result_func = mysqli_query($id_mysql_host,$query_exec)){
 											//output
 											balas_sukses($id_mysql,$sender,$server_inb,$balasan_prefix.$pesan_sukses,$outbox_table,$outbox_isi,$outbox_date,$outbox_server,$outbox_recipient);
@@ -400,11 +419,20 @@
 									$kunci_par = '';
 									$j=0;
 									while($row_kunci = $result_kunci->fetch_array()) {
-										if($j>0){
-											$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j]. "'";
+										if($row_kunci['type']=='LIKE'){
+											if($j>0){
+												$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$j]. "%'";
+											}else{
+												$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '%". $parameter_array[$j] . "%'";
+											}
 										}else{
-											$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j] . "'";
+											if($j>0){
+												$kunci_par = $kunci_par . " AND " . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j]. "'";
+											}else{
+												$kunci_par = $kunci_par . $row_kunci['parameter'] ." ". $row_kunci['type'] ." '". $parameter_array[$j] . "'";
+											}
 										}
+										
 										$j++;
 									}
 									//cek private or publik, boleh atau tidak
@@ -520,8 +548,11 @@
 										$pt = $row_pt[0];
 										$ptc = mysqli_num_rows($result_pt);
 										//jika tidak sama = 2
-										if($ptc>1){
-											$allowed_keyword = 2;
+										if($ptc==0){
+											$allowed_keyword = 1;
+										}elseif($ptc>1){
+											$full_query = "SELECT " . $output_par . " FROM " . $table_par . " WHERE 1=1 " . $join_par . $where_par . " AND " . $rt  . "=" . $pk . " " . $order_par;
+											$allowed_keyword = 1;
 										}elseif($pk==$pt){
 											$allowed_keyword = 1;
 										}else{
@@ -573,7 +604,6 @@
 											}
 											$j++;
 										}
-										//
 										if($j==0){
 											$pesan="Data tidak ditemukan.";
 										}else{
@@ -617,4 +647,38 @@
 	}
 
 	add_log("Respon berhasil dieksekusi , ".$cnt_msg." pesan berhasil diproses. Detail :" . $pesan_log,$id_mysql);
+
+	$cnt_schm = 0;
+	// eksekusi scheduled message
+	$query_schm = "SELECT * FROM `tb_sch_msg` schm INNER JOIN tb_host hos ON hos.id_host=schm.id_host";
+	$result_schm = mysqli_query($id_mysql,$query_schm);
+	while($row_schm = $result_schm->fetch_array()) {
+		//
+		$host_schm = $row_schm['host'];
+		$username_schm = $row_schm['username'];
+		$password_schm = $row_schm['password'];
+		$db_schm = $row_schm['db'];
+		//
+		$tb_schm = $row_schm['table_name'];
+		$fl_id_contact = $row_schm['fl_id_contact'];
+		$fl_msg = $row_schm['fl_msg'];
+		$fl_date = $row_schm['fl_date'];
+		$fl_hour = $row_schm['fl_hour'];
+		//
+		if($id_mysql_host = mysqli_connect($host_schm,$username_schm,$password_schm,$db_schm)){
+			$query_tb = "SELECT ".$fl_id_contact.",".$fl_msg.",".$fl_date.",".$fl_hour." FROM " . $tb_schm . " WHERE ".$fl_date."='".$date_tmp."' AND ".$fl_hour."='".$hr_tmp."'" ;
+			$result_tb = mysqli_query($id_mysql_host,$query_tb);
+			while($row_tb = $result_tb->fetch_array()) {
+				$id_kontak = $row_tb[0];
+				$pesan = $row_tb[1];
+
+				send_pesan($id_mysql,$pesan,$id_kontak);
+
+				$cnt_schm+=1;
+			}
+		}
+	}
+
+	add_log($cnt_schm . " scheduled message berhasil dikirim.",$id_mysql);
+
 ?>
